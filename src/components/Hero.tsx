@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ContentData } from "@/types";
+import { Tape } from "./ui/Tape";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -15,9 +16,8 @@ export default function Hero({ data }: { data: ContentData }) {
 
   useGSAP(
     () => {
-      // Background parallax effect
       gsap.to(".hero-bg", {
-        yPercent: 30,
+        yPercent: 20,
         ease: "none",
         scrollTrigger: {
           trigger: container.current,
@@ -27,9 +27,9 @@ export default function Hero({ data }: { data: ContentData }) {
         },
       });
 
-      // Text fade up when not in splash
       gsap.from(".hero-content", {
-        y: 30,
+        y: 40,
+        rotation: -2,
         opacity: 0,
         duration: 1.5,
         ease: "power3.out",
@@ -40,23 +40,33 @@ export default function Hero({ data }: { data: ContentData }) {
   );
 
   return (
-    <section ref={container} className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-end pb-24 px-6 text-center">
+    <section ref={container} className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center p-8 text-center bg-[#151210]">
+      {/* Background texture overlayed on image */}
       <div 
-        className="hero-bg absolute inset-0 -z-10 bg-cover bg-center"
+        className="hero-bg absolute inset-0 -z-20 bg-cover bg-center sepia-[0.3] grayscale-[0.2]"
         style={{ backgroundImage: `url(${data.hero.backgroundImage})` }}
       />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/50 to-transparent" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#151210] via-[#151210]/60 to-transparent" />
       
-      <div className="hero-content z-10 w-full">
-        <h2 className="text-pink-300 tracking-[0.2em] uppercase text-xs mb-4">
+      {/* Giant Polaroid Hero */}
+      <div className="hero-content relative bg-[#f4f1ea] p-4 pb-20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] max-w-[90%] rotate-2 z-10 w-full mx-auto">
+        <Tape className="-top-4 -right-4 rotate-[25deg]" />
+        <Tape className="-bottom-3 -left-4 -rotate-[20deg]" />
+
+        <div className="w-full aspect-square border border-black/10 overflow-hidden bg-black mb-6">
+          <img 
+            src={data.hero.backgroundImage} 
+            className="w-full h-full object-cover sepia-[0.4] contrast-125"
+          />
+        </div>
+
+        <h2 className="text-[#8B7120] font-sans tracking-[0.3em] uppercase text-[10px] mb-3">
           {data.hero.title}
         </h2>
-        <h1 className="font-serif text-6xl text-white leading-tight mb-6 drop-shadow-lg">
-          {data.hero.groomName}<br />
-          <span className="text-3xl italic font-light font-sans text-pink-300">&</span><br />
-          {data.hero.brideName}
+        <h1 className="font-serif text-5xl text-black leading-none mb-4">
+          {data.hero.groomName} <span className="text-2xl italic font-light font-sans text-[#D4AF37]">&</span> {data.hero.brideName}
         </h1>
-        <p className="text-white/80 font-serif text-lg tracking-widest uppercase border-t border-b border-white/20 py-3 mx-auto max-w-[200px]">
+        <p className="font-serif text-sm italic text-black/60">
           {new Date(data.hero.date).toLocaleDateString('id-ID', {
             day: 'numeric',
             month: 'long',

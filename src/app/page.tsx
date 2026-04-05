@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import data from "@/data/content.json";
 import Splash from "@/components/Splash";
 import Hero from "@/components/Hero";
@@ -14,13 +14,9 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   const [isOpened, setIsOpened] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
 
   const handleOpen = () => {
     setIsOpened(true);
-    if (audioRef.current) {
-      audioRef.current.play().catch((e) => console.log("Audio play blocked by browser", e));
-    }
   };
 
   return (
@@ -38,8 +34,6 @@ export default function Home() {
         <Banking banking={data.banking as any} />
         <Footer />
       </div>
-
-      <audio ref={audioRef} src={data.music} loop />
     </>
   );
 }
