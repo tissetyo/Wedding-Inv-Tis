@@ -5,6 +5,12 @@ import data from "@/data/content.json";
 import Splash from "@/components/Splash";
 import Hero from "@/components/Hero";
 import Couple from "@/components/Couple";
+import Events from "@/components/Events";
+import Gallery from "@/components/Gallery";
+import LoveStory from "@/components/LoveStory";
+import RSVP from "@/components/RSVP";
+import Banking from "@/components/Banking";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const [isOpened, setIsOpened] = useState(false);
@@ -25,11 +31,12 @@ export default function Home() {
       <div className={`relative ${isOpened ? "overflow-y-auto" : "overflow-hidden h-screen"}`}>
         <Hero data={data as any} />
         <Couple couple={data.couple as any} />
-        
-        {/* Simple placeholder for bottom spacing */}
-        <div className="h-48 flex items-center justify-center text-white/30 text-sm">
-          More sections continuing...
-        </div>
+        <Events events={data.events as any} />
+        <Gallery images={data.gallery as any} />
+        <LoveStory story={data.loveStory as any} />
+        <RSVP />
+        <Banking banking={data.banking as any} />
+        <Footer />
       </div>
 
       <audio ref={audioRef} src={data.music} loop />
