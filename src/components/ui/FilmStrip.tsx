@@ -7,29 +7,28 @@ interface FilmStripProps {
 
 export function FilmStrip({ children, className }: FilmStripProps) {
   return (
-    <div className={`w-full relative shadow-[0_20px_50px_rgba(0,0,0,0.9)] ${className || ""}`}>
-      {/* Top Sprocket Holes */}
+    <div className={`w-full relative ${className || ""}`}>
+      {/* Top Sprocket Holes - Minimal */}
       <div 
-        className="w-full h-[15px] bg-[#111]" 
+        className="w-full h-[12px] bg-[#1a1714]" 
         style={{ 
-          backgroundImage: "radial-gradient(circle, #EAE0C8 4px, transparent 4px)", 
-          backgroundSize: "20px 15px", 
+          backgroundImage: "radial-gradient(circle, #f4f1ea 3px, transparent 3px)", 
+          backgroundSize: "20px 12px", 
           backgroundPosition: "center top",
           backgroundRepeat: "repeat-x" 
         }} 
       />
       
-      {/* Content Area */}
-      <div className="w-full bg-[#111] p-2 overflow-hidden border-t-2 border-b-2 border-[#111]">
+      <div className="w-full bg-[#1a1714] overflow-hidden">
         {children}
       </div>
 
-      {/* Bottom Sprocket Holes */}
+      {/* Bottom Sprocket Holes - Minimal */}
       <div 
-        className="w-full h-[15px] bg-[#111]" 
+        className="w-full h-[12px] bg-[#1a1714]" 
         style={{ 
-          backgroundImage: "radial-gradient(circle, #EAE0C8 4px, transparent 4px)", 
-          backgroundSize: "20px 15px", 
+          backgroundImage: "radial-gradient(circle, #f4f1ea 3px, transparent 3px)", 
+          backgroundSize: "20px 12px", 
           backgroundPosition: "center bottom",
           backgroundRepeat: "repeat-x" 
         }} 

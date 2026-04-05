@@ -3,11 +3,17 @@
 import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { MailOpen } from "lucide-react";
 import { HeroConfig } from "@/types";
-import { FilmStrip } from "./ui/FilmStrip";
 
 gsap.registerPlugin(useGSAP);
+
+const VerticalFilmStrip = ({ className }: { className: string }) => (
+  <div className={`absolute top-0 w-12 h-[200%] bg-[#0a0a0a] border-black flex flex-col justify-start z-50 overflow-hidden opacity-90 shadow-2xl film-scroll ${className}`}>
+     {Array.from({length: 40}).map((_, i) => (
+       <div key={i} className="w-5 h-6 bg-[#cfc5b3] rounded-sm mx-auto my-3 opacity-80 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] shrink-0" />
+     ))}
+  </div>
+);
 
 export default function Splash({
   hero,
@@ -21,21 +27,57 @@ export default function Splash({
 
   useGSAP(
     () => {
-      gsap.from(".splash-text", {
-        y: 20,
+      // Need to make sure container exists because of React strict mode / hydration
+      if (!container.current) return;
+
+      // Infinite smooth film rolling
+      const rollAnim = gsap.to(".film-scroll", {
+        y: "-50%",
+        repeat: -1,
+        duration: 8,
+        ease: "none"
+      });
+      
+      gsap.from(".center-content", {
+        scale: 0.9,
         opacity: 0,
-        duration: 2,
-        stagger: 0.3,
-        ease: "power2.out",
-        delay: 0.5,
+        duration: 3,
+        ease: "power3.out",
+        delay: 0.2,
       });
 
       if (isOpen) {
-        gsap.to(container.current, {
+        // Speed up the film roll dramatically
+        gsap.to(rollAnim, { timeScale: 8, duration: 1 });
+
+        // Fade out text
+        gsap.to(".center-content", {
           opacity: 0,
           scale: 1.1,
+          duration: 1,
+          ease: "power2.in"
+        });
+
+        // Slide the film strips outwards like a curtain opening
+        gsap.to(".strip-left", {
+          xPercent: -100,
           duration: 1.5,
-          ease: "power2.inOut",
+          delay: 0.5,
+          ease: "power3.inOut"
+        });
+        
+        gsap.to(".strip-right", {
+          xPercent: 100,
+          duration: 1.5,
+          delay: 0.5,
+          ease: "power3.inOut"
+        });
+
+        // Fade out entire splash overlay
+        gsap.to(container.current, {
+          opacity: 0,
+          duration: 1.5,
+          delay: 1,
           onComplete: () => {
             onOpen();
             if (container.current) container.current.style.display = "none";
@@ -49,38 +91,35 @@ export default function Splash({
   return (
     <div
       ref={container}
-      className="fixed inset-0 z-50 flex flex-col justify-between bg-[#151210] text-[#EAE0C8]"
+      className="fixed inset-0 z-50 flex flex-col justify-center items-center bg-[#181818] text-[#f4f1ea] overflow-hidden"
     >
-      <FilmStrip className="opacity-70" > <div className="h-4 bg-black" /> </FilmStrip>
+      <VerticalFilmStrip className="left-0 border-r-4 strip-left" />
+      <VerticalFilmStrip className="right-0 border-l-4 strip-right" />
       
-      {/* Background texture */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/dust.png')" }} />
-      <div className="absolute inset-0 bg-[#D4AF37]/5 pointer-events-none mix-blend-color" />
+      {/* Heavy vintage noise / film scratch overlay */}
+      <div className="absolute inset-0 opacity-30 pointer-events-none mix-blend-overlay z-40 bg-overlay" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/stardust.png')" }} />
+      <div className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-screen z-40 bg-overlay" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/grunge-wall.png')" }} />
       
-      <div className="relative z-10 flex flex-col items-center justify-center text-center px-8 h-full">
-        <div className="border-4 border-double border-[#D4AF37]/40 p-8 py-16 w-full max-w-sm relative">
-          {/* Classic silent film intertitle look */}
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#151210] px-4 text-[#D4AF37] tracking-[0.3em] text-[10px] uppercase splash-text">
-            {hero.title}
-          </div>
-          
-          <h1 className="splash-text font-serif text-5xl mb-6 leading-tight tracking-wider">
-            {hero.groomName} <br/> 
-            <span className="font-sans text-2xl font-light italic text-[#D4AF37] my-2 block">&</span> 
-            {hero.brideName}
-          </h1>
-          
-          <button
-            onClick={() => setIsOpen(true)}
-            className="splash-text mx-auto mt-12 flex items-center gap-3 border border-[#D4AF37]/50 bg-black/50 px-8 py-4 text-xs tracking-widest uppercase transition-all hover:bg-[#D4AF37]/20 hover:border-[#D4AF37]"
-          >
-            <MailOpen size={14} />
-            Buka Undangan
-          </button>
-        </div>
+      {/* Center Artistic Layout */}
+      <div className="relative z-30 flex flex-col items-center justify-center text-center px-12 h-screen center-content w-full">
+        <h2 className="text-[#bfae91]/80 font-sans tracking-[0.4em] text-[10px] uppercase mb-4 shadow-black drop-shadow-md">
+          {hero.title || "The Wedding Of"}
+        </h2>
+        
+        {/* Massive Artistic Script matching the "The End" reference */}
+        <h1 className="font-script text-6xl md:text-8xl text-[#f4f1ea] mb-2 leading-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)] whitespace-nowrap" style={{ fontFamily: "var(--font-script)" }}>
+          {hero.groomName || "Andi"} <br/> 
+          <span className="text-4xl px-4 text-[#bfae91]">&</span> <br/>
+          {hero.brideName || "Sari"}
+        </h1>
+        
+        <button
+          onClick={() => setIsOpen(true)}
+          className="mt-16 px-8 py-3 bg-[#f4f1ea]/10 text-white font-sans text-[10px] tracking-[0.3em] uppercase border border-[#f4f1ea]/20 rounded-full hover:bg-[#f4f1ea]/30 hover:border-[#f4f1ea] transition-all backdrop-blur-sm cursor-pointer relative z-50 animate-pulse"
+        >
+          Open Invitation
+        </button>
       </div>
-
-      <FilmStrip className="opacity-70" > <div className="h-4 bg-black" /> </FilmStrip>
     </div>
   );
 }
