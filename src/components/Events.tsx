@@ -4,28 +4,28 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ContentData } from "@/types";
+import { ContentData, EventConfig } from "@/types";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-export default function Events({ events }: { events: ContentData["events"] }) {
+export default function Events({ events, theme }: { events: EventConfig[]; theme: any }) {
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      const cards = gsap.utils.toArray(".event-card");
-      cards.forEach((card: any) => {
-        gsap.from(card, {
+      const elements = gsap.utils.toArray(".reveal-event");
+      elements.forEach((el: any) => {
+        gsap.from(el, {
           scrollTrigger: {
-            trigger: card,
+            trigger: el,
             start: "top 85%",
             toggleActions: "play none none reverse",
           },
-          y: 20,
+          y: 30,
           opacity: 0,
-          duration: 1.2,
+          duration: 1,
           ease: "power2.out",
         });
       });
@@ -34,17 +34,17 @@ export default function Events({ events }: { events: ContentData["events"] }) {
   );
 
   return (
-    <section ref={container} className="py-32 px-6 text-center bg-[#1a1714] relative">
+    <section ref={container} className="py-20 px-6">
       <div className="mb-20 text-center">
-        <h2 className="font-sans text-[10px] tracking-[0.3em] uppercase text-[#f4f1ea]/60 mb-4">Acara Pernikahan</h2>
-        <div className="h-[1px] w-8 bg-[#f4f1ea]/20 mx-auto" />
+        <h2 className="font-sans text-[10px] tracking-[0.3em] uppercase text-[var(--color-text)]/60 mb-4">Acara Pernikahan</h2>
+        <div className="h-[1px] w-8 bg-[var(--color-text)]/20 mx-auto" />
       </div>
 
       <div className="flex flex-col gap-12 items-center">
         {events.map((event) => (
           <div 
             key={event.id} 
-            className="event-card border border-[#f4f1ea]/10 w-full max-w-[85%] p-8"
+            className="reveal-event border border-[var(--color-text)]/10 w-full max-w-[85%] p-8 bg-[var(--color-bg)]/50 backdrop-blur-sm"
           >
             <h3 className="font-serif text-2xl text-[#f4f1ea] mb-8">{event.title}</h3>
             

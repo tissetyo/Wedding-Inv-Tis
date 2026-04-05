@@ -11,7 +11,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-export default function LoveStory({ story }: { story: ContentData["loveStory"] }) {
+export default function LoveStory({ story, theme }: { story: ContentData["loveStory"]; theme: any }) {
   const container = useRef<HTMLDivElement>(null);
   const slider = useRef<HTMLDivElement>(null);
 
@@ -35,11 +35,22 @@ export default function LoveStory({ story }: { story: ContentData["loveStory"] }
   );
 
   return (
-    <section ref={container} className="h-screen w-full relative bg-[#1a1714] overflow-hidden flex flex-col justify-center">
-      
+    <section 
+      ref={container} 
+      className="h-screen w-full relative text-[var(--color-text)] overflow-hidden flex flex-col justify-center"
+      style={{ backgroundColor: theme?.backgroundColor || "var(--color-bg)" }}
+    >
+      {/* Background Section Override */}
+      {theme?.backgroundType === "image" && theme?.backgroundImage && (
+        <div 
+          className="absolute inset-0 bg-cover bg-center grayscale contrast-125 sepia-[0.2]"
+          style={{ backgroundImage: `url('${theme.backgroundImage}')` }}
+        />
+      )}
+
       <div className="absolute top-32 left-0 w-full text-center z-10">
-        <h2 className="font-sans text-[10px] tracking-[0.3em] uppercase text-[#f4f1ea]/60 mb-4">Cerita Cinta</h2>
-        <div className="h-[1px] w-8 bg-[#f4f1ea]/20 mx-auto" />
+        <h2 className="font-sans text-[10px] tracking-[0.3em] uppercase text-current/60 mb-4">Cerita Cinta</h2>
+        <div className="h-[1px] w-8 bg-current/20 mx-auto" />
       </div>
 
       {/* Minimalist Horizontal Film Reel */}
@@ -48,12 +59,12 @@ export default function LoveStory({ story }: { story: ContentData["loveStory"] }
           {story.map((item, idx) => (
             <div 
               key={idx} 
-              className="story-frame w-screen h-64 flex items-center justify-center px-8 border-r border-[#f4f1ea]/5"
+              className="story-frame w-screen h-64 flex items-center justify-center px-8 border-r border-[var(--color-text)]/5"
             >
               <div className="text-center px-4 max-w-sm">
-                 <span className="text-[#bfae91] font-sans text-[9px] tracking-[0.3em] uppercase mb-4 block">{item.year}</span>
-                 <h3 className="font-serif text-2xl text-[#f4f1ea] mb-4">{item.title}</h3>
-                 <p className="text-[#f4f1ea]/60 text-xs leading-relaxed font-sans">{item.description}</p>
+                 <span className="text-[var(--color-accent)] font-sans text-[9px] tracking-[0.3em] uppercase mb-4 block">{item.year}</span>
+                 <h3 className="font-serif text-2xl text-current mb-4">{item.title}</h3>
+                 <p className="text-current/60 text-xs leading-relaxed font-sans">{item.description}</p>
               </div>
             </div>
           ))}
@@ -61,7 +72,7 @@ export default function LoveStory({ story }: { story: ContentData["loveStory"] }
       </FilmStrip>
 
       <div className="absolute bottom-12 left-0 w-full text-center z-10">
-        <p className="text-[9px] tracking-[0.3em] uppercase text-[#f4f1ea]/30">Scroll</p>
+        <p className="text-[9px] tracking-[0.3em] uppercase text-current/30">Scroll</p>
       </div>
     </section>
   );

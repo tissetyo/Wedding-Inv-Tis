@@ -1,7 +1,53 @@
 {
   "theme": {
-    "primaryColor": "#1D4ED8",
-    "accentColor": "#FBCFE8"
+    "global": {
+      "primaryBg": "#1a1714",
+      "textColor": "#f4f1ea",
+      "accentColor": "#bfae91",
+      "baseRadius": "8px"
+    },
+    "sections": {
+      "splash": {
+        "backgroundType": "image",
+        "backgroundColor": "",
+        "backgroundImage": "/first-screen.png"
+      },
+      "hero": {
+        "backgroundType": "image",
+        "backgroundColor": "",
+        "backgroundImage": "/first-screen.png"
+      },
+      "couple": {
+        "backgroundType": "color",
+        "backgroundColor": "#1a1714",
+        "backgroundImage": ""
+      },
+      "events": {
+        "backgroundType": "color",
+        "backgroundColor": "#1a1714",
+        "backgroundImage": ""
+      },
+      "gallery": {
+        "backgroundType": "color",
+        "backgroundColor": "#1a1714",
+        "backgroundImage": ""
+      },
+      "loveStory": {
+        "backgroundType": "color",
+        "backgroundColor": "#1a1714",
+        "backgroundImage": ""
+      },
+      "banking": {
+        "backgroundType": "color",
+        "backgroundColor": "#1a1714",
+        "backgroundImage": ""
+      },
+      "rsvp": {
+        "backgroundType": "color",
+        "backgroundColor": "#1a1714",
+        "backgroundImage": ""
+      }
+    }
   },
   "hero": {
     "title": "The Wedding Of",

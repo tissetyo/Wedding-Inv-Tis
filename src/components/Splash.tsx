@@ -17,9 +17,11 @@ const VerticalFilmStrip = ({ className }: { className: string }) => (
 
 export default function Splash({
   hero,
+  theme,
   onOpen,
 }: {
   hero: HeroConfig;
+  theme: any;
   onOpen: () => void;
 }) {
   const container = useRef<HTMLDivElement>(null);
@@ -79,8 +81,8 @@ export default function Splash({
           duration: 1.5,
           delay: 1,
           onComplete: () => {
-            onOpen();
-            if (container.current) container.current.style.display = "none";
+             onOpen();
+             if (container.current) container.current.style.display = "none";
           },
         });
       }
@@ -91,16 +93,19 @@ export default function Splash({
   return (
     <div
       ref={container}
-      className="fixed inset-0 z-50 flex flex-col justify-center items-center bg-[#181818] text-[#f4f1ea] overflow-hidden"
+      className="fixed inset-0 z-50 flex flex-col justify-center items-center text-[var(--color-text)] overflow-hidden"
+      style={{ backgroundColor: theme?.backgroundColor || "var(--color-bg)" }}
     >
       <VerticalFilmStrip className="left-0 border-r-4 strip-left" />
       <VerticalFilmStrip className="right-0 border-l-4 strip-right" />
       
       {/* Background Cinematic Photo Overlay */}
-      <div 
-        className="absolute inset-0 z-0 bg-cover bg-center grayscale contrast-125 sepia-[0.2]"
-        style={{ backgroundImage: `url('/first-screen.png')` }}
-      />
+      {theme?.backgroundType === "image" && theme?.backgroundImage && (
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center grayscale contrast-125 sepia-[0.2]"
+          style={{ backgroundImage: `url(${theme.backgroundImage})` }}
+        />
+      )}
       
       {/* Heavy vintage noise / film scratch overlay */}
       <div className="absolute inset-0 opacity-30 pointer-events-none mix-blend-overlay z-40 bg-overlay" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/stardust.png')" }} />

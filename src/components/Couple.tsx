@@ -11,7 +11,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-export default function Couple({ couple }: { couple: ContentData["couple"] }) {
+export default function Couple({ couple, theme }: { couple: ContentData["couple"]; theme: any }) {
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -37,10 +37,22 @@ export default function Couple({ couple }: { couple: ContentData["couple"] }) {
   );
 
   return (
-    <section ref={container} className="relative py-32 px-2 text-center bg-[#1a1714]">
+    <section 
+      ref={container} 
+      className="relative py-32 px-2 text-center text-[var(--color-text)] overflow-hidden"
+      style={{ backgroundColor: theme?.backgroundColor || undefined }}
+    >
+      {/* Background Section Override */}
+      {theme?.backgroundType === "image" && theme?.backgroundImage && (
+        <div 
+          className="absolute inset-0 bg-cover bg-center grayscale contrast-125 sepia-[0.2]"
+          style={{ backgroundImage: `url('${theme.backgroundImage}')` }}
+        />
+      )}
+
       <div className="mb-10 text-center relative z-10">
-        <h2 className="font-sans text-[10px] tracking-[0.3em] uppercase text-[#f4f1ea]/60 mb-4">Mempelai</h2>
-        <div className="h-[1px] w-8 bg-[#f4f1ea]/20 mx-auto" />
+        <h2 className="font-sans text-[10px] tracking-[0.3em] uppercase text-current/60 mb-4">Mempelai</h2>
+        <div className="h-[1px] w-8 bg-current/20 mx-auto" />
       </div>
 
       <div className="relative flex flex-row justify-center w-full max-w-sm mx-auto items-start pb-24 z-10 mt-8 px-2">

@@ -10,37 +10,26 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-export default function Gallery({ images }: { images: string[] }) {
+export default function Gallery({ images, theme }: { images: string[]; theme: any }) {
   const container = useRef<HTMLDivElement>(null);
 
   const rotations = ['-rotate-6', 'rotate-3', '-rotate-2', 'rotate-6', '-rotate-3', 'rotate-2'];
 
   useGSAP(
     () => {
-      gsap.from(".gallery-title", {
-        scrollTrigger: {
-          trigger: ".gallery-title",
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
-        y: 20,
-        opacity: 0,
-        duration: 1,
-      });
-
-      const polaroids = gsap.utils.toArray(".polaroid-messy");
-      polaroids.forEach((polaroid: any, index) => {
-        gsap.from(polaroid, {
+      const items = gsap.utils.toArray(".gallery-item");
+      items.forEach((item: any, i) => {
+        gsap.from(item, {
           scrollTrigger: {
-            trigger: polaroid,
+            trigger: item,
             start: "top 85%",
             toggleActions: "play none none reverse",
           },
-          opacity: 0,
           y: 60,
-          rotation: index % 2 === 0 ? -15 : 15,
+          opacity: 0,
+          rotation: i % 2 === 0 ? -15 : 15, // dramatically chaotic start
           duration: 1.5,
-          ease: "back.out(1.2)",
+          ease: "expo.out",
         });
       });
     },
@@ -48,11 +37,21 @@ export default function Gallery({ images }: { images: string[] }) {
   );
 
   return (
-    <section ref={container} className="py-32 px-4 bg-[#1a1714] relative overflow-hidden">
-      {/* Background noise matching Couple dark style */}
-      <div className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-overlay z-0" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/dust.png')" }} />
-
-      <div className="gallery-title mb-16 text-center relative z-10">
+    <section 
+      ref={container} 
+      className="relative py-24 bg-[#1a1714] text-[var(--color-text)] overflow-hidden"
+      style={{ backgroundColor: theme?.backgroundColor || undefined }}
+    >
+      {/* Background Section Override */}
+      {theme?.backgroundType === "image" && theme?.backgroundImage && (
+        <div 
+          className="absolute inset-0 bg-cover bg-center grayscale contrast-125 sepia-[0.2]"
+          style={{ backgroundImage: `url('${theme.backgroundImage}')` }}
+        />
+      )}
+      <div className="absolute inset-0 opacity-[0.15] mix-blend-screen pointer-events-none z-0" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/grunge-wall.png')" }} />
+      
+      <div className="mb-16 text-center relative z-10">
         <h2 className="font-sans text-[10px] tracking-[0.3em] uppercase text-[#f4f1ea]/60 mb-4">Galeri Momen</h2>
         <div className="h-[1px] w-8 bg-[#f4f1ea]/20 mx-auto" />
       </div>

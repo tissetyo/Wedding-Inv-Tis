@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import data from "@/data/content.json";
+import { useState, useEffect } from "react";
+import defaultData from "@/data/content.json";
+import { supabase } from "@/lib/supabase";
 import Splash from "@/components/Splash";
 import Hero from "@/components/Hero";
 import Couple from "@/components/Couple";
@@ -15,6 +16,17 @@ import PaperPlaneGuide from "@/components/PaperPlaneGuide";
 
 export default function Home() {
   const [isOpened, setIsOpened] = useState(false);
+  const [content, setContent] = useState<any>(defaultData);
+
+  useEffect(() => {
+    async function fetchDB() {
+      const { data, error } = await supabase.from("site_settings").select("payload").eq("id", 1).single();
+      if (data && data.payload) {
+        setContent(data.payload);
+      }
+    }
+    fetchDB();
+  }, []);
 
   const handleOpen = () => {
     setIsOpened(true);
@@ -22,18 +34,18 @@ export default function Home() {
 
   return (
     <>
-      <Splash hero={data.hero as any} onOpen={handleOpen} />
+      <Splash hero={content.hero as any} theme={content.theme.sections.splash} onOpen={handleOpen} />
       
       {/* The main content that's hidden behind the splash until opened */}
       <div className={`relative ${isOpened ? "overflow-y-auto" : "overflow-hidden h-screen"}`}>
         {isOpened && <PaperPlaneGuide />}
-        <Hero data={data as any} />
-        <Couple couple={data.couple as any} />
-        <Events events={data.events as any} />
-        <Gallery images={data.gallery as any} />
-        <LoveStory story={data.loveStory as any} />
-        <RSVP />
-        <Banking banking={data.banking as any} />
+        <Hero data={content as any} theme={content.theme.sections.hero} />
+        <Couple couple={content.couple as any} theme={content.theme.sections.couple} />
+        <Events events={content.events as any} theme={content.theme.sections.events} />
+        <Gallery images={content.gallery as any} theme={content.theme.sections.gallery} />
+        <LoveStory story={content.loveStory as any} theme={content.theme.sections.loveStory} />
+        <RSVP theme={content.theme.sections.rsvp} />
+        <Banking banking={content.banking as any} theme={content.theme.sections.banking} />
         <Footer />
       </div>
     </>
