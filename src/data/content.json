@@ -1,0 +1,91 @@
+{
+  "theme": {
+    "primaryColor": "#1D4ED8",
+    "accentColor": "#FBCFE8"
+  },
+  "hero": {
+    "title": "The Wedding Of",
+    "groomName": "Andi",
+    "brideName": "Sari",
+    "date": "2026-02-14T00:00:00Z",
+    "backgroundImage": "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop"
+  },
+  "quote": {
+    "text": "\"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang.\"",
+    "source": "QS. Ar-Rum: 21"
+  },
+  "couple": {
+    "groom": {
+      "fullName": "Andi Pratama, S.Kom",
+      "father": "Bpk. Hadi Pratama",
+      "mother": "Ibu Siti Aminah",
+      "instagram": "@andi.pratama",
+      "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop"
+    },
+    "bride": {
+      "fullName": "Sari Dewi, S.Pd",
+      "father": "Bpk. Bambang Wijaya",
+      "mother": "Ibu Rina Wulandari",
+      "instagram": "@sari.dewi",
+      "photo": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop"
+    }
+  },
+  "events": [
+    {
+      "id": "akad",
+      "title": "Akad Nikah",
+      "date": "2026-02-14",
+      "time": "08:00 - 10:00 WIB",
+      "locationName": "Masjid Al-Ikhlas",
+      "address": "Jl. Sudirman No. 1, Jakarta Selatan",
+      "mapLink": "https://maps.google.com"
+    },
+    {
+      "id": "resepsi",
+      "title": "Resepsi",
+      "date": "2026-02-14",
+      "time": "11:00 - 14:00 WIB",
+      "locationName": "Grand Ballroom Hotel Mulia",
+      "address": "Jl. Asia Afrika Senayan, Jakarta Selatan",
+      "mapLink": "https://maps.google.com"
+    }
+  ],
+  "gallery": [
+    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=800&auto=format&fit=crop"
+  ],
+  "loveStory": [
+    {
+      "year": "2022",
+      "title": "Pertama Kali Bertemu",
+      "description": "Kami bertemu pertama kali di sebuah acara seminar kampus. Tanpa disangka, pertemuan singkat itu menjadi awal dari segalanya."
+    },
+    {
+      "year": "2023",
+      "title": "Mulai Menjalin Hubungan",
+      "description": "Setelah beberapa bulan saling mengenal, kami memutuskan untuk menjalin hubungan serius dengan restu kedua orang tua."
+    },
+    {
+      "year": "2025",
+      "title": "Lamaran",
+      "description": "Dengan penuh keyakinan dan cinta, Andi melamar Sari di hadapan kedua keluarga besar. Alhamdulillah, lamaran diterima!"
+    }
+  ],
+  "banking": [
+    {
+      "bank": "BCA",
+      "accountNumber": "1234567890",
+      "accountName": "Andi Pratama"
+    },
+    {
+      "bank": "Mandiri",
+      "accountNumber": "0987654321",
+      "accountName": "Sari Dewi"
+    }
+  ],
+  "music": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+}
