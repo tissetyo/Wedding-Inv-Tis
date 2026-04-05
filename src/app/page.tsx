@@ -11,6 +11,7 @@ import LoveStory from "@/components/LoveStory";
 import RSVP from "@/components/RSVP";
 import Banking from "@/components/Banking";
 import Footer from "@/components/Footer";
+import PaperPlaneGuide from "@/components/PaperPlaneGuide";
 
 export default function Home() {
   const [isOpened, setIsOpened] = useState(false);
@@ -25,6 +26,7 @@ export default function Home() {
       
       {/* The main content that's hidden behind the splash until opened */}
       <div className={`relative ${isOpened ? "overflow-y-auto" : "overflow-hidden h-screen"}`}>
+        {isOpened && <PaperPlaneGuide />}
         <Hero data={data as any} />
         <Couple couple={data.couple as any} />
         <Events events={data.events as any} />

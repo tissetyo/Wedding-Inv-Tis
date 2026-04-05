@@ -20,6 +20,7 @@ export default function Banking({ banking }: { banking: ContentData["banking"] }
         scrollTrigger: {
           trigger: ".bank-card",
           start: "top 85%",
+          toggleActions: "play none none reverse",
         },
         opacity: 0,
         y: 20,

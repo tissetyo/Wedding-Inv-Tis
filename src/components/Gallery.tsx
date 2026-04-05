@@ -21,6 +21,7 @@ export default function Gallery({ images }: { images: string[] }) {
         scrollTrigger: {
           trigger: ".gallery-title",
           start: "top 85%",
+          toggleActions: "play none none reverse",
         },
         y: 20,
         opacity: 0,
@@ -33,6 +34,7 @@ export default function Gallery({ images }: { images: string[] }) {
           scrollTrigger: {
             trigger: polaroid,
             start: "top 85%",
+            toggleActions: "play none none reverse",
           },
           opacity: 0,
           y: 60,

@@ -21,6 +21,7 @@ export default function Events({ events }: { events: ContentData["events"] }) {
           scrollTrigger: {
             trigger: card,
             start: "top 85%",
+            toggleActions: "play none none reverse",
           },
           y: 20,
           opacity: 0,

@@ -24,7 +24,11 @@ export default function RSVP() {
   useGSAP(
     () => {
       gsap.from(".rsvp-anim", {
-        scrollTrigger: { trigger: ".rsvp-anim", start: "top 85%" },
+        scrollTrigger: { 
+          trigger: ".rsvp-anim", 
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
         y: 20, opacity: 0, stagger: 0.1, duration: 1.2, ease: "power2.out"
       });
     },

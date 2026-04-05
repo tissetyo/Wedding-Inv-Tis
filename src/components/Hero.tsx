@@ -15,6 +15,7 @@ export default function Hero({ data }: { data: ContentData }) {
 
   useGSAP(
     () => {
+      // Parallax background
       gsap.to(".hero-bg", {
         yPercent: 10,
         ease: "none",
@@ -26,13 +27,18 @@ export default function Hero({ data }: { data: ContentData }) {
         },
       });
 
+      // Staggered text fade in
       gsap.from(".hero-content", {
+        scrollTrigger: {
+          trigger: container.current,
+          start: "top 60%",
+          toggleActions: "play none none reverse", // Ensures it reverses when scrolling up
+        },
         scale: 1.1,
         opacity: 0,
         filter: "blur(5px)",
         duration: 2,
         ease: "power2.out",
-        delay: 0.5,
       });
     },
     { scope: container }
