@@ -96,6 +96,12 @@ export default function Splash({
       <VerticalFilmStrip className="left-0 border-r-4 strip-left" />
       <VerticalFilmStrip className="right-0 border-l-4 strip-right" />
       
+      {/* Background Cinematic Photo Overlay */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center grayscale contrast-125 sepia-[0.2]"
+        style={{ backgroundImage: `url('/first-screen.png')` }}
+      />
+      
       {/* Heavy vintage noise / film scratch overlay */}
       <div className="absolute inset-0 opacity-30 pointer-events-none mix-blend-overlay z-40 bg-overlay" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/stardust.png')" }} />
       <div className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-screen z-40 bg-overlay" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/grunge-wall.png')" }} />
