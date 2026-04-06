@@ -345,8 +345,7 @@ export default function AdminPage() {
                               const newContent = {...content};
                               newContent.theme.sections[secKey as SectionKey].backgroundImage = url;
                               // Sync Hero and Splash if one is updated in Design Studio
-                              if (secKey === 'hero') newContent.hero.backgroundImage = url;
-                              if (secKey === 'splash') newContent.hero.backgroundImage = url;
+                              // REMOVED sync logic as per user request for separate inputs
                               setContent(newContent);
                             }}
                           />
@@ -379,20 +378,30 @@ export default function AdminPage() {
                   <input type="datetime-local" value={content.hero.date.split('T')[0]} onChange={(e) => setContent({...content, hero: {...content.hero, date: e.target.value + "T00:00:00Z"}})} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-sm" />
                 </div>
               </div>
-              <ImageUpload 
-                 label="Hero Landing Photo"
-                 value={content.hero.backgroundImage}
-                 onChange={(url) => {
-                   const newContent = {...content};
-                   newContent.hero.backgroundImage = url;
-                   // Crucial: Update the theme backgrounds too
-                   newContent.theme.sections.hero.backgroundImage = url;
-                   newContent.theme.sections.splash.backgroundImage = url;
-                   newContent.theme.sections.hero.backgroundType = 'image';
-                   newContent.theme.sections.splash.backgroundType = 'image';
-                   setContent(newContent);
-                 }}
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <ImageUpload 
+                  label="1. Splash Screen Background"
+                  value={content.theme.sections.splash.backgroundImage || ""}
+                  onChange={(url) => {
+                    const newContent = {...content};
+                    newContent.theme.sections.splash.backgroundImage = url;
+                    newContent.theme.sections.splash.backgroundType = 'image';
+                    setContent(newContent);
+                  }}
+                />
+                <ImageUpload 
+                  label="2. Hero Section Background"
+                  value={content.theme.sections.hero.backgroundImage || ""}
+                  onChange={(url) => {
+                    const newContent = {...content};
+                    newContent.theme.sections.hero.backgroundImage = url;
+                    newContent.theme.sections.hero.backgroundType = 'image';
+                    // We also keep content.hero.backgroundImage updated as a reference
+                    newContent.hero.backgroundImage = url;
+                    setContent(newContent);
+                  }}
+                />
+              </div>
             </div>
           )}
 
