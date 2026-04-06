@@ -100,10 +100,10 @@ export default function Splash({
       <VerticalFilmStrip className="right-0 border-l-4 strip-right" />
       
       {/* Background Cinematic Photo Overlay */}
-      {(theme?.backgroundType === "image" && theme?.backgroundImage) || hero.backgroundImage ? (
+      {theme?.backgroundType === "image" && (theme?.backgroundImage || hero.backgroundImage) ? (
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center grayscale contrast-125 sepia-[0.2]"
-          style={{ backgroundImage: `url('${hero.backgroundImage || theme.backgroundImage}')` }}
+          style={{ backgroundImage: `url('${theme.backgroundImage || hero.backgroundImage}')` }}
         />
       ) : null}
       
