@@ -53,12 +53,12 @@ export default function Hero({ data, theme }: { data: ContentData; theme: any })
       style={{ backgroundColor: theme?.backgroundColor || "var(--color-bg)" }}
     >
       {/* Background Section Override */}
-      {theme?.backgroundType === "image" && theme?.backgroundImage && (
+      {(theme?.backgroundType === "image" && theme?.backgroundImage) || data.hero.backgroundImage ? (
         <div 
           className="hero-bg absolute inset-0 bg-cover bg-center grayscale contrast-125 sepia-[0.2]"
-          style={{ backgroundImage: `url('${theme.backgroundImage}')` }}
+          style={{ backgroundImage: `url('${data.hero.backgroundImage || theme.backgroundImage}')` }}
         />
-      )}
+      ) : null}
       
       {/* Cinematic vignettes & noise */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-bg)_100%)] z-10 opacity-90" />

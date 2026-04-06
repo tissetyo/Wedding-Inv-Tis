@@ -336,7 +336,14 @@ export default function AdminPage() {
                           <ImageUpload 
                             label="Background Photo"
                             value={content.theme.sections[secKey as SectionKey].backgroundImage || ""}
-                            onChange={(url) => setContent({...content, theme: {...content.theme, sections: {...content.theme.sections, [secKey]: {...content.theme.sections[secKey as SectionKey], backgroundImage: url}}}})}
+                            onChange={(url) => {
+                              const newContent = {...content};
+                              newContent.theme.sections[secKey as SectionKey].backgroundImage = url;
+                              // Sync Hero and Splash if one is updated in Design Studio
+                              if (secKey === 'hero') newContent.hero.backgroundImage = url;
+                              if (secKey === 'splash') newContent.hero.backgroundImage = url;
+                              setContent(newContent);
+                            }}
                           />
                         )}
                       </div>
@@ -370,7 +377,16 @@ export default function AdminPage() {
               <ImageUpload 
                  label="Hero Landing Photo"
                  value={content.hero.backgroundImage}
-                 onChange={(url) => setContent({...content, hero: {...content.hero, backgroundImage: url}})}
+                 onChange={(url) => {
+                   const newContent = {...content};
+                   newContent.hero.backgroundImage = url;
+                   // Crucial: Update the theme backgrounds too
+                   newContent.theme.sections.hero.backgroundImage = url;
+                   newContent.theme.sections.splash.backgroundImage = url;
+                   newContent.theme.sections.hero.backgroundType = 'image';
+                   newContent.theme.sections.splash.backgroundType = 'image';
+                   setContent(newContent);
+                 }}
               />
             </div>
           )}
