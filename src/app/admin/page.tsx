@@ -52,26 +52,51 @@ const ImageUpload = ({
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
-      <div className="flex items-center gap-4">
-        {value && (
-          <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200">
-            <img src={value} alt="Preview" className="w-full h-full object-cover" />
-          </div>
+      <div className="flex items-center justify-between">
+        <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest">{label}</label>
+        {value && !isUploading && (
+          <button 
+            type="button"
+            onClick={() => onChange("")}
+            className="text-[9px] font-black text-red-400 uppercase tracking-widest hover:text-red-600 transition-colors"
+          >
+            ✕ Remove Photo
+          </button>
         )}
-        <div className="flex-1">
+      </div>
+      
+      <div className="flex items-center gap-4 group">
+        <div className={`relative w-24 h-24 rounded-2xl overflow-hidden border border-gray-100 bg-gray-50 flex items-center justify-center shrink-0 transition-all ${isUploading ? 'ring-2 ring-blue-500 animate-pulse' : ''}`}>
+          {value ? (
+            <>
+              <img src={value} alt="Preview" className={`w-full h-full object-cover transition-opacity ${isUploading ? 'opacity-30' : 'opacity-100'}`} />
+              {isUploading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white/40 backdrop-blur-sm">
+                  <span className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="text-xl text-gray-300">🖼️</div>
+          )}
+        </div>
+
+        <div className="flex-1 min-w-0">
           <input 
             type="file" 
             accept="image/*"
+            disabled={isUploading}
             onChange={handleFileChange}
-            className="block w-full text-sm text-gray-500
+            className="block w-full text-xs text-gray-500
               file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-blue-50 file:text-blue-700
-              hover:file:bg-blue-100 transition-all cursor-pointer"
+              file:rounded-xl file:border-0
+              file:text-[10px] file:font-black file:uppercase
+              file:bg-gray-900 file:text-white
+              hover:file:bg-blue-600 file:transition-all cursor-pointer
+              disabled:opacity-50"
           />
-          {isUploading && <p className="text-xs text-blue-600 mt-1 animate-pulse font-medium">Uploading to Cloudinary...</p>}
+          {isUploading && <p className="text-[9px] text-blue-600 mt-2 font-black uppercase tracking-widest animate-pulse">Processing High-Res Upload...</p>}
+          {!value && !isUploading && <p className="text-[9px] text-gray-400 mt-2 italic">No photo selected. Reverting to color.</p>}
         </div>
       </div>
     </div>
