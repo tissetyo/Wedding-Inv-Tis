@@ -181,14 +181,16 @@ export default function AdminPage() {
 
       {/* Main Content */}
       <main className="flex-1 p-4 md:p-12 overflow-y-auto max-w-5xl mx-auto w-full">
-        <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h2 className="text-4xl font-black text-gray-900 capitalize tracking-tight">{navItems.find(i => i.id === activeTab)?.label}</h2>
-            <p className="text-gray-500 text-sm mt-2">Manage your wedding invitation details dynamically.</p>
+        <header className="mb-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div className="min-w-0">
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900 capitalize tracking-tight leading-tight">{navItems.find(i => i.id === activeTab)?.label}</h2>
+            <p className="text-gray-500 text-sm mt-2 max-w-md">Manage your wedding invitation details dynamically.</p>
           </div>
-          <a href="/" target="_blank" className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-bold shadow-sm hover:bg-gray-50 flex items-center gap-2">
-            View Live Site ↗
-          </a>
+          <div className="shrink-0">
+            <a href="/" target="_blank" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-bold shadow-sm hover:bg-gray-50 transition-colors whitespace-nowrap">
+              View Live Site ↗
+            </a>
+          </div>
         </header>
 
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -197,26 +199,26 @@ export default function AdminPage() {
             <div className="space-y-8">
               <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
                 <h3 className="text-lg font-bold mb-6 flex items-center gap-2">Global Palette</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div>
-                    <label className="block text-sm font-bold text-gray-600 mb-2">Primary Background</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="min-w-0">
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Primary Background</label>
                     <div className="flex gap-2">
-                      <input type="color" value={content.theme.global.primaryBg} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, primaryBg: e.target.value}}})} className="w-12 h-10 p-1 rounded-lg border border-gray-200 cursor-pointer" />
-                      <input type="text" value={content.theme.global.primaryBg} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, primaryBg: e.target.value}}})} className="flex-1 p-2 border border-gray-200 rounded-lg text-sm uppercase" />
+                      <input type="color" value={content.theme.global.primaryBg} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, primaryBg: e.target.value}}})} className="w-12 h-10 p-1 rounded-lg border border-gray-200 cursor-pointer shrink-0" />
+                      <input type="text" value={content.theme.global.primaryBg} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, primaryBg: e.target.value}}})} className="w-full p-2 border border-gray-200 rounded-lg text-sm uppercase font-mono" />
                     </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-bold text-gray-600 mb-2">Text Color</label>
+                  <div className="min-w-0">
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Text Color</label>
                     <div className="flex gap-2">
-                      <input type="color" value={content.theme.global.textColor} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, textColor: e.target.value}}})} className="w-12 h-10 p-1 rounded-lg border border-gray-200 cursor-pointer" />
-                      <input type="text" value={content.theme.global.textColor} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, textColor: e.target.value}}})} className="flex-1 p-2 border border-gray-200 rounded-lg text-sm uppercase" />
+                      <input type="color" value={content.theme.global.textColor} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, textColor: e.target.value}}})} className="w-12 h-10 p-1 rounded-lg border border-gray-200 cursor-pointer shrink-0" />
+                      <input type="text" value={content.theme.global.textColor} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, textColor: e.target.value}}})} className="w-full p-2 border border-gray-200 rounded-lg text-sm uppercase font-mono" />
                     </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-bold text-gray-600 mb-2">Accent Color</label>
+                  <div className="min-w-0">
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Accent Color</label>
                     <div className="flex gap-2">
-                      <input type="color" value={content.theme.global.accentColor} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, accentColor: e.target.value}}})} className="w-12 h-10 p-1 rounded-lg border border-gray-200 cursor-pointer" />
-                      <input type="text" value={content.theme.global.accentColor} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, accentColor: e.target.value}}})} className="flex-1 p-2 border border-gray-200 rounded-lg text-sm uppercase" />
+                      <input type="color" value={content.theme.global.accentColor} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, accentColor: e.target.value}}})} className="w-12 h-10 p-1 rounded-lg border border-gray-200 cursor-pointer shrink-0" />
+                      <input type="text" value={content.theme.global.accentColor} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, accentColor: e.target.value}}})} className="w-full p-2 border border-gray-200 rounded-lg text-sm uppercase font-mono" />
                     </div>
                   </div>
                 </div>
@@ -226,27 +228,27 @@ export default function AdminPage() {
                 <h3 className="text-lg font-bold mb-6">Section Specifics</h3>
                 <div className="divide-y divide-gray-100">
                   {Object.keys(content.theme.sections).map((secKey) => (
-                    <div key={secKey} className="py-6 first:pt-0 last:pb-0 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                      <div>
-                        <h4 className="font-bold text-gray-900 capitalize">{secKey} Background</h4>
-                        <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest">Section Template Styling</p>
+                    <div key={secKey} className="py-6 first:pt-0 last:pb-0 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-gray-900 capitalize text-base">{secKey} Background</h4>
+                        <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold">Section Template Styling</p>
                         <select 
                           value={content.theme.sections[secKey as SectionKey].backgroundType}
                           onChange={(e) => setContent({...content, theme: {...content.theme, sections: {...content.theme.sections, [secKey]: {...content.theme.sections[secKey as SectionKey], backgroundType: e.target.value}}}})}
-                          className="mt-4 w-full p-3 border border-gray-200 rounded-xl text-sm font-bold bg-gray-50"
+                          className="mt-4 w-full p-3 border border-gray-200 rounded-xl text-sm font-bold bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none"
                         >
                           <option value="color">Solid Color</option>
                           <option value="image">Cloudinary Image</option>
                         </select>
                       </div>
 
-                      <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-4 min-w-0">
                         {content.theme.sections[secKey as SectionKey].backgroundType === 'color' ? (
                           <div className="space-y-2">
-                            <label className="text-xs font-bold text-gray-400 uppercase">Pick Color</label>
+                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Pick Color</label>
                             <div className="flex gap-2">
-                              <input type="color" value={content.theme.sections[secKey as SectionKey].backgroundColor || ""} onChange={(e) => setContent({...content, theme: {...content.theme, sections: {...content.theme.sections, [secKey]: {...content.theme.sections[secKey as SectionKey], backgroundColor: e.target.value}}}})} className="w-12 h-10 p-1 rounded-lg border border-gray-200 cursor-pointer" />
-                              <input type="text" placeholder="Hex Code" value={content.theme.sections[secKey as SectionKey].backgroundColor} onChange={(e) => setContent({...content, theme: {...content.theme, sections: {...content.theme.sections, [secKey]: {...content.theme.sections[secKey as SectionKey], backgroundColor: e.target.value}}}})} className="flex-1 p-2 border border-gray-200 rounded-lg text-sm uppercase" />
+                              <input type="color" value={content.theme.sections[secKey as SectionKey].backgroundColor || ""} onChange={(e) => setContent({...content, theme: {...content.theme, sections: {...content.theme.sections, [secKey]: {...content.theme.sections[secKey as SectionKey], backgroundColor: e.target.value}}}})} className="w-12 h-10 p-1 rounded-lg border border-gray-200 cursor-pointer shrink-0" />
+                              <input type="text" placeholder="Hex Code" value={content.theme.sections[secKey as SectionKey].backgroundColor} onChange={(e) => setContent({...content, theme: {...content.theme, sections: {...content.theme.sections, [secKey]: {...content.theme.sections[secKey as SectionKey], backgroundColor: e.target.value}}}})} className="w-full p-2 border border-gray-200 rounded-lg text-sm uppercase font-mono" />
                             </div>
                           </div>
                         ) : (
