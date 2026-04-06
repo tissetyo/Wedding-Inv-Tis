@@ -127,10 +127,10 @@ export default function AdminPage() {
     setMessage("");
     const result = await saveContentAction(content);
     if (result.success) {
-      setMessage("Saved to Supabase successfully!");
+      setMessage("✓ Saved to Supabase successfully!");
       setTimeout(() => setMessage(""), 3000);
     } else {
-      setMessage("Error saving data.");
+      setMessage(`✕ ERROR: ${result.error || "Failed to save"}`);
     }
     setIsSaving(false);
   };
@@ -235,21 +235,26 @@ export default function AdminPage() {
         </nav>
 
         <div className="p-6 border-t bg-white shrink-0">
-          <button 
-            onClick={handleSave}
-            disabled={isSaving}
-            className="w-full py-4 bg-gray-900 text-white rounded-2xl font-black text-sm hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 shadow-xl shadow-gray-200 flex items-center justify-center gap-2"
-          >
-            {isSaving ? (
-              <span className="flex items-center gap-2">
-                <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                Saving...
-              </span>
-            ) : (
-              <>💾 Save All Changes</>
-            )}
-          </button>
-          {message && <p className="text-[10px] text-center mt-3 font-bold text-green-600 uppercase tracking-tighter animate-bounce">{message}</p>}
+          {isSaving ? (
+            <button disabled className="w-full py-4 bg-gray-400 text-white rounded-2xl font-black text-sm animate-pulse cursor-wait">
+              SAVING...
+            </button>
+          ) : (
+            <button 
+              onClick={handleSave}
+              className="w-full py-4 bg-gray-900 text-white rounded-2xl font-black text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-gray-200 flex items-center justify-center gap-2"
+            >
+              💾 Save All Changes
+            </button>
+          )}
+          
+          {message && (
+            <div className={`mt-3 p-3 rounded-xl border text-[10px] font-black uppercase tracking-tighter text-center leading-tight
+              ${message.includes("✓") ? "bg-green-50 border-green-200 text-green-600" : "bg-red-50 border-red-200 text-red-600 animate-shake"}
+            `}>
+              {message}
+            </div>
+          )}
         </div>
       </aside>
 

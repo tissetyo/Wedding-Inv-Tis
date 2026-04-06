@@ -26,18 +26,18 @@ export async function saveContentAction(content: any) {
   try {
     const { error } = await supabase
       .from("site_settings")
-      .update({ payload: content })
-      .eq("id", 1);
+      .upsert({ id: 1, payload: content }) // Use upsert instead of update
+      .select();
       
     if (error) {
-      console.error(error);
-      return { success: false, error: "Failed to save content" };
+      console.error("Supabase Save Error:", error);
+      return { success: false, error: `${error.message} (Code: ${error.code})` };
     }
 
     revalidatePath("/");
     return { success: true };
-  } catch (err) {
-    console.error(err);
-    return { success: false, error: "Failed to save content" };
+  } catch (err: any) {
+    console.error("Save Action Exception:", err);
+    return { success: false, error: err.message || "Unknown error occurred" };
   }
 }
