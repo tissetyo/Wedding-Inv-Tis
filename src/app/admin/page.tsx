@@ -83,6 +83,10 @@ const ImageUpload = ({
 type SectionKey = keyof typeof defaultData.theme.sections;
 
 export default function AdminPage() {
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [pin, setPin] = useState("");
+  const [error, setError] = useState("");
+
   const [activeTab, setActiveTab] = useState("design");
   const [content, setContent] = useState<any>(defaultData);
   const [isSaving, setIsSaving] = useState(false);
@@ -90,6 +94,25 @@ export default function AdminPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
+    // Check if previously authorized in this session
+    const auth = sessionStorage.getItem("admin_auth");
+    if (auth === "true") setIsAuthorized(true);
+  }, []);
+
+  const handlePinSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pin === "2907") {
+      setIsAuthorized(true);
+      sessionStorage.setItem("admin_auth", "true");
+      setError("");
+    } else {
+      setError("Incorrect PIN. Please try again.");
+      setPin("");
+    }
+  };
+
+  useEffect(() => {
+    if (!isAuthorized) return;
     async function fetchDB() {
       const { data } = await supabase.from("site_settings").select("payload").eq("id", 1).single();
       if (data && data.payload) {
@@ -97,7 +120,7 @@ export default function AdminPage() {
       }
     }
     fetchDB();
-  }, []);
+  }, [isAuthorized]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -122,6 +145,50 @@ export default function AdminPage() {
     { id: "banking", label: "Amplop Digital", icon: "💳" },
     { id: "advanced", label: "Advanced JSON", icon: "⚙️" },
   ];
+
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4 font-sans">
+        <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-sm animate-in fade-in zoom-in duration-300">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
+              🔒
+            </div>
+            <h1 className="text-2xl font-black tracking-tight text-gray-900">Protected Access</h1>
+            <p className="text-gray-500 text-sm mt-2 font-medium uppercase tracking-widest text-[10px]">Admin Studio Entrance</p>
+          </div>
+
+          <form onSubmit={handlePinSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Secure PIN</label>
+              <input 
+                type="password" 
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+                placeholder="••••"
+                maxLength={4}
+                autoFocus
+                className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl text-center text-2xl tracking-[1em] font-black focus:ring-4 ring-blue-500/10 outline-none transition-all"
+              />
+            </div>
+            {error && <p className="text-red-500 text-[10px] font-bold text-center uppercase tracking-tighter">{error}</p>}
+            <button 
+              type="submit"
+              className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-blue-200"
+            >
+              UNLOCK STUDIO
+            </button>
+          </form>
+          
+          <div className="mt-8 text-center">
+            <a href="/" className="text-gray-400 text-[10px] font-bold uppercase tracking-widest hover:text-blue-600 transition-colors">
+              ← Back to Invitation
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row text-gray-900 font-sans">
