@@ -211,15 +211,15 @@ export default function AdminPage() {
 
       {/* Sidebar */}
       <aside className={`
-        fixed md:sticky top-0 left-0 h-screen w-64 bg-white border-r z-50 transition-transform duration-300
+        fixed md:sticky top-0 left-0 h-screen w-64 bg-white border-r z-50 transition-transform duration-300 flex flex-col
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
       `}>
-        <div className="p-8">
+        <div className="p-8 shrink-0">
           <h1 className="text-2xl font-black tracking-tighter text-blue-600 hidden md:block">Wedding Admin</h1>
           <p className="text-[10px] uppercase tracking-widest text-gray-400 mt-1 md:block hidden">Titis & Tyara Edition</p>
         </div>
 
-        <nav className="mt-4 px-4 space-y-1">
+        <nav className="mt-4 px-4 space-y-1 flex-1 overflow-y-auto pb-8">
           {navItems.map((item) => (
             <button
               key={item.id}
@@ -234,15 +234,22 @@ export default function AdminPage() {
           ))}
         </nav>
 
-        <div className="absolute bottom-0 left-0 w-full p-6 border-t">
+        <div className="p-6 border-t bg-white shrink-0">
           <button 
             onClick={handleSave}
             disabled={isSaving}
-            className="w-full py-3 bg-gray-900 text-white rounded-xl font-bold text-sm hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
+            className="w-full py-4 bg-gray-900 text-white rounded-2xl font-black text-sm hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 shadow-xl shadow-gray-200 flex items-center justify-center gap-2"
           >
-            {isSaving ? "Saving..." : "Save All Changes"}
+            {isSaving ? (
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                Saving...
+              </span>
+            ) : (
+              <>💾 Save All Changes</>
+            )}
           </button>
-          {message && <p className="text-[10px] text-center mt-2 font-bold text-green-600 uppercase tracking-tighter">{message}</p>}
+          {message && <p className="text-[10px] text-center mt-3 font-bold text-green-600 uppercase tracking-tighter animate-bounce">{message}</p>}
         </div>
       </aside>
 
@@ -253,9 +260,16 @@ export default function AdminPage() {
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 capitalize tracking-tight leading-tight">{navItems.find(i => i.id === activeTab)?.label}</h2>
             <p className="text-gray-500 text-sm mt-2 max-w-md">Manage your wedding invitation details dynamically.</p>
           </div>
-          <div className="shrink-0">
-            <a href="/" target="_blank" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-bold shadow-sm hover:bg-gray-50 transition-colors whitespace-nowrap">
-              View Live Site ↗
+          <div className="flex items-center gap-3 shrink-0">
+            <button 
+              onClick={handleSave}
+              disabled={isSaving}
+              className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all flex items-center gap-2 disabled:opacity-50"
+            >
+              {isSaving ? "Saving..." : "💾 Save Changes"}
+            </button>
+            <a href="/" target="_blank" className="px-5 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-bold shadow-sm hover:bg-gray-50 transition-all whitespace-nowrap">
+              View Site ↗
             </a>
           </div>
         </header>
