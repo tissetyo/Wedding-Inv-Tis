@@ -5,13 +5,13 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
-import { Send } from "lucide-react";
+import { Send, Leaf, Feather, Sparkles } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP);
 }
 
-export default function PaperPlaneGuide() {
+export default function PaperPlaneGuide({ icon = 'plane' }: { icon?: string }) {
   const container = useRef<HTMLDivElement>(null);
   const planeRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
@@ -42,11 +42,17 @@ export default function PaperPlaneGuide() {
           const rect = sec.getBoundingClientRect();
           const st = window.scrollY;
           
-          // Wide vintage zig zag sweeping physically behind the polaroids and tickets
-          const x = i % 2 === 0 ? w * 0.8 : w * 0.2;
-          const y = rect.top + st + (rect.height / 2);
-          
-          pathCoords.push({ x, y });
+          if (sec.id === 'love-story') {
+            // Create a small circular loop
+            pathCoords.push({ x: w * 0.8, y: rect.top + st + rect.height * 0.25 });
+            pathCoords.push({ x: w * 0.2, y: rect.top + st + rect.height * 0.5 });
+            pathCoords.push({ x: w * 0.8, y: rect.top + st + rect.height * 0.75 });
+          } else {
+            // Wide vintage zig zag sweeping physically behind the polaroids and tickets
+            const x = i % 2 === 0 ? w * 0.8 : w * 0.2;
+            const y = rect.top + st + (rect.height / 2);
+            pathCoords.push({ x, y });
+          }
         });
 
         // Send gracefully into the footer
@@ -142,7 +148,10 @@ export default function PaperPlaneGuide() {
         className="absolute top-0 left-0 w-10 h-10 text-[#f4f1ea] drop-shadow-[0_5px_15px_rgba(244,241,234,0.6)] z-10 flex justify-center items-center"
       >
         <div className="rotate-45 translate-x-1 -translate-y-1">
-          <Send className="w-full h-full" strokeWidth={1.5} fill="#f4f1ea" />
+          {(() => {
+            const IconComponent = icon === 'leaf' ? Leaf : icon === 'feather' ? Feather : icon === 'sparkles' ? Sparkles : Send;
+            return <IconComponent className="w-full h-full" strokeWidth={1.5} fill="#f4f1ea" />;
+          })()}
         </div>
       </div>
 

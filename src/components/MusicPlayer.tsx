@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
+import { Disc3 } from "lucide-react";
 
 export default function MusicPlayer({ src, play }: { src: string; play?: boolean }) {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -39,10 +40,10 @@ export default function MusicPlayer({ src, play }: { src: string; play?: boolean
         aria-label={isPlaying ? "Pause music" : "Play music"}
       >
         <span
-          className="text-base select-none inline-block"
+          className="inline-block"
           style={isPlaying ? { animation: "spin 3s linear infinite" } : {}}
         >
-          {isPlaying ? "♫" : "♪"}
+          <Disc3 className="w-6 h-6" strokeWidth={1} />
         </span>
       </button>
     </>

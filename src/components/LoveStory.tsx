@@ -36,6 +36,7 @@ export default function LoveStory({ story, theme }: { story: ContentData["loveSt
 
   return (
     <section 
+      id="love-story"
       ref={container} 
       className="h-screen w-full relative text-[var(--color-text)] overflow-hidden flex flex-col justify-center"
       style={{ backgroundColor: theme?.backgroundColor || "var(--color-bg)" }}

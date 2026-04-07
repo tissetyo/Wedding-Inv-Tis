@@ -73,7 +73,7 @@ export default function Hero({ data, theme }: { data: ContentData; theme: any })
         {/* Artistic Script Font */}
         <h1 className="font-script text-7xl text-current leading-none mb-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" style={{ fontFamily: "var(--font-script)" }}>
           {data.hero.groomName} <br/> 
-          <span className="text-3xl text-[var(--color-accent)]">&</span> <br/>
+          <span className="font-serif text-5xl mx-4 text-[var(--color-accent)] inline-block my-2" style={{ fontFamily: "var(--font-serif)" }}>&</span> <br/>
           {data.hero.brideName}
         </h1>
         

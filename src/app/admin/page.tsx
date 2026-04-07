@@ -312,7 +312,7 @@ export default function AdminPage() {
             <div className="space-y-8">
               <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
                 <h3 className="text-lg font-bold mb-6 flex items-center gap-2">Global Palette</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="min-w-0">
                     <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Primary Background</label>
                     <div className="flex gap-2">
@@ -333,6 +333,19 @@ export default function AdminPage() {
                       <input type="color" value={content.theme.global.accentColor} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, accentColor: e.target.value}}})} className="w-12 h-10 p-1 rounded-lg border border-gray-200 cursor-pointer shrink-0" />
                       <input type="text" value={content.theme.global.accentColor} onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, accentColor: e.target.value}}})} className="w-full p-2 border border-gray-200 rounded-lg text-sm uppercase font-mono" />
                     </div>
+                  </div>
+                  <div className="min-w-0">
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Guide Icon</label>
+                    <select 
+                      value={content.theme.global.guideIcon || 'plane'}
+                      onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, guideIcon: e.target.value}}})}
+                      className="w-full p-2.5 border border-gray-200 rounded-lg text-sm bg-gray-50 uppercase font-mono"
+                    >
+                      <option value="plane">Paper Plane</option>
+                      <option value="leaf">Leaf</option>
+                      <option value="feather">Feather</option>
+                      <option value="sparkles">Sparkles</option>
+                    </select>
                   </div>
                 </div>
               </div>

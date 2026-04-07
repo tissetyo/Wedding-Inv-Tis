@@ -4,7 +4,8 @@
       "primaryBg": "#1a1714",
       "textColor": "#f4f1ea",
       "accentColor": "#bfae91",
-      "baseRadius": "8px"
+      "baseRadius": "8px",
+      "guideIcon": "plane"
     },
     "sections": {
       "splash": {
