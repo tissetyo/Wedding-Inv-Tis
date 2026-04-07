@@ -22,6 +22,19 @@ export async function uploadImageAction(base64Image: string) {
   }
 }
 
+export async function uploadAudioAction(base64Audio: string) {
+  try {
+    const uploadResponse = await cloudinary.uploader.upload(base64Audio, {
+      folder: "wedding_invitation",
+      resource_type: "video",
+    });
+    return { success: true, url: uploadResponse.secure_url };
+  } catch (error) {
+    console.error("Cloudinary audio upload error:", error);
+    return { success: false, error: "Audio upload failed" };
+  }
+}
+
 export async function saveContentAction(content: any) {
   try {
     const { error } = await supabase

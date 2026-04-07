@@ -80,11 +80,14 @@ export default function Hero({ data, theme }: { data: ContentData; theme: any })
         <div className="w-[1px] h-12 bg-[var(--color-text)]/20 mb-8 mx-auto" />
         
         <p className="font-serif text-xs tracking-[0.3em] uppercase text-[var(--color-text)]/50">
-          {new Date(data.hero.date).toLocaleDateString('en-US', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-          })}
+          {(() => {
+            const d = new Date(data.hero.date);
+            return isNaN(d.getTime()) ? '' : d.toLocaleDateString('id-ID', {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric'
+            });
+          })()}
         </p>
       </div>
 

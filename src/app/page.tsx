@@ -13,6 +13,7 @@ import RSVP from "@/components/RSVP";
 import Banking from "@/components/Banking";
 import Footer from "@/components/Footer";
 import PaperPlaneGuide from "@/components/PaperPlaneGuide";
+import MusicPlayer from "@/components/MusicPlayer";
 
 export default function Home() {
   const [isOpened, setIsOpened] = useState(false);
@@ -39,6 +40,7 @@ export default function Home() {
       {/* The main content that's hidden behind the splash until opened */}
       <div className={`relative ${isOpened ? "overflow-y-auto" : "overflow-hidden h-screen"}`}>
         {isOpened && <PaperPlaneGuide />}
+        {isOpened && <MusicPlayer src={content.music || ""} autoPlay={true} />}
         <Hero data={content as any} theme={content.theme.sections.hero} />
         <Couple couple={content.couple as any} theme={content.theme.sections.couple} />
         <Events events={content.events as any} theme={content.theme.sections.events} />

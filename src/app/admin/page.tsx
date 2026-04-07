@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import defaultData from "@/data/content.json";
-import { saveContentAction, uploadImageAction } from "./actions";
+import { saveContentAction, uploadImageAction, uploadAudioAction } from "./actions";
 import { supabase } from "@/lib/supabase";
 
 // --- Components ---
@@ -117,6 +117,7 @@ export default function AdminPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [musicUploading, setMusicUploading] = useState(false);
 
   useEffect(() => {
     // Check if previously authorized in this session
@@ -168,6 +169,7 @@ export default function AdminPage() {
     { id: "gallery", label: "Gallery Momen", icon: "📸" },
     { id: "loveStory", label: "Cerita Cinta", icon: "📜" },
     { id: "banking", label: "Amplop Digital", icon: "💳" },
+    { id: "music", label: "Background Music", icon: "🎵" },
     { id: "advanced", label: "Advanced JSON", icon: "⚙️" },
   ];
 
@@ -400,7 +402,7 @@ export default function AdminPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-600 mb-2">Wedding Date</label>
-                  <input type="datetime-local" value={content.hero.date.split('T')[0]} onChange={(e) => setContent({...content, hero: {...content.hero, date: e.target.value + "T00:00:00Z"}})} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-sm" />
+                  <input type="date" value={(content.hero.date || "").split('T')[0]} onChange={(e) => setContent({...content, hero: {...content.hero, date: e.target.value}})} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-sm" />
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -469,31 +471,57 @@ export default function AdminPage() {
             <div className="space-y-8">
               {content.events.map((event: any, idx: number) => (
                 <div key={idx} className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-                  <h3 className="text-lg font-bold mb-6">{event.title}</h3>
+                  <h3 className="text-lg font-bold mb-6">{event.title || `Event ${idx + 1}`}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-bold text-gray-600 mb-2">Event Title</label>
-                      <input type="text" value={event.title} onChange={(e) => {
+                      <input type="text" value={event.title || ""} onChange={(e) => {
                         const newEvents = [...content.events];
-                        newEvents[idx].title = e.target.value;
+                        newEvents[idx] = {...newEvents[idx], title: e.target.value};
+                        setContent({...content, events: newEvents});
+                      }} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-600 mb-2">Date</label>
+                      <input type="date" value={event.date || ""} onChange={(e) => {
+                        const newEvents = [...content.events];
+                        newEvents[idx] = {...newEvents[idx], date: e.target.value};
                         setContent({...content, events: newEvents});
                       }} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-sm" />
                     </div>
                     <div>
                       <label className="block text-sm font-bold text-gray-600 mb-2">Time Range</label>
-                      <input type="text" value={event.time} onChange={(e) => {
+                      <input type="text" value={event.time || ""} placeholder="08:00 - 10:00 WIB" onChange={(e) => {
                         const newEvents = [...content.events];
-                        newEvents[idx].time = e.target.value;
+                        newEvents[idx] = {...newEvents[idx], time: e.target.value};
+                        setContent({...content, events: newEvents});
+                      }} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-600 mb-2">Venue Name</label>
+                      <input type="text" value={event.locationName || ""} onChange={(e) => {
+                        const newEvents = [...content.events];
+                        newEvents[idx] = {...newEvents[idx], locationName: e.target.value};
                         setContent({...content, events: newEvents});
                       }} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-sm" />
                     </div>
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-bold text-gray-600 mb-2">Venue Name</label>
-                      <input type="text" value={event.locationName} onChange={(e) => {
+                      <label className="block text-sm font-bold text-gray-600 mb-2">Full Address</label>
+                      <textarea rows={2} value={event.address || ""} placeholder="Jl. Example No. 1, Kota, Provinsi" onChange={(e) => {
                         const newEvents = [...content.events];
-                        newEvents[idx].locationName = e.target.value;
+                        newEvents[idx] = {...newEvents[idx], address: e.target.value};
+                        setContent({...content, events: newEvents});
+                      }} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-sm resize-none" />
+                      <p className="text-[10px] text-gray-400 mt-1">This address is also used to auto-generate the embedded map preview</p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-bold text-gray-600 mb-2">Google Maps Link</label>
+                      <input type="url" value={event.mapLink || ""} placeholder="https://maps.google.com/..." onChange={(e) => {
+                        const newEvents = [...content.events];
+                        newEvents[idx] = {...newEvents[idx], mapLink: e.target.value};
                         setContent({...content, events: newEvents});
                       }} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-sm" />
+                      <p className="text-[10px] text-gray-400 mt-1">Paste the Google Maps link for the &quot;Lihat Maps&quot; button on the invitation</p>
                     </div>
                   </div>
                 </div>
@@ -587,6 +615,82 @@ export default function AdminPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {activeTab === "music" && (
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-8">
+              <div>
+                <h3 className="text-lg font-bold mb-2">Background Music</h3>
+                <p className="text-sm text-gray-500 mb-6">Upload an MP3 file or paste a direct URL. Music auto-plays when guests open the invitation.</p>
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Upload MP3 File</label>
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    disabled={musicUploading}
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      setMusicUploading(true);
+                      const reader = new FileReader();
+                      reader.readAsDataURL(file);
+                      reader.onloadend = async () => {
+                        const base64 = reader.result as string;
+                        const result = await uploadAudioAction(base64);
+                        if (result.success && result.url) {
+                          setContent({...content, music: result.url});
+                        } else {
+                          alert("Audio upload failed. Try pasting a URL instead.");
+                        }
+                        setMusicUploading(false);
+                      };
+                    }}
+                    className="block w-full text-xs text-gray-500
+                      file:mr-4 file:py-2 file:px-4
+                      file:rounded-xl file:border-0
+                      file:text-[10px] file:font-black file:uppercase
+                      file:bg-gray-900 file:text-white
+                      hover:file:bg-blue-600 file:transition-all cursor-pointer
+                      disabled:opacity-50"
+                  />
+                  {musicUploading && <p className="text-[9px] text-blue-600 mt-2 font-black uppercase tracking-widest animate-pulse">Uploading Audio to Cloud...</p>}
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <div className="flex-1 h-[1px] bg-gray-200" />
+                  <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">OR</span>
+                  <div className="flex-1 h-[1px] bg-gray-200" />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Direct URL</label>
+                  <input
+                    type="url"
+                    value={content.music || ""}
+                    onChange={(e) => setContent({...content, music: e.target.value})}
+                    placeholder="https://example.com/song.mp3"
+                    className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-sm"
+                  />
+                  <p className="text-[10px] text-gray-400 mt-1">Direct link to an MP3 file (YouTube/Spotify links won&apos;t work)</p>
+                </div>
+
+                {content.music && (
+                  <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Preview</label>
+                    <audio controls src={content.music} className="w-full" />
+                    <button
+                      onClick={() => setContent({...content, music: ""})}
+                      className="mt-3 text-[9px] font-black text-red-400 uppercase tracking-widest hover:text-red-600 transition-colors"
+                    >
+                      ✕ Remove Music
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
