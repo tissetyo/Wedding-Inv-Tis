@@ -19,10 +19,12 @@ export default function Splash({
   hero,
   theme,
   onOpen,
+  onInteraction,
 }: {
   hero: HeroConfig;
   theme: any;
   onOpen: () => void;
+  onInteraction?: () => void;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -125,7 +127,10 @@ export default function Splash({
         </h1>
         
         <button
-          onClick={() => setIsOpen(true)}
+          onClick={() => {
+            setIsOpen(true);
+            onInteraction?.();
+          }}
           className="mt-16 px-8 py-3 bg-[#f4f1ea]/10 text-white font-sans text-[10px] tracking-[0.3em] uppercase border border-[#f4f1ea]/20 rounded-full hover:bg-[#f4f1ea]/30 hover:border-[#f4f1ea] transition-all backdrop-blur-sm cursor-pointer relative z-50 animate-pulse"
         >
           Open Invitation

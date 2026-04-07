@@ -17,6 +17,7 @@ import MusicPlayer from "@/components/MusicPlayer";
 
 export default function Home() {
   const [isOpened, setIsOpened] = useState(false);
+  const [musicStarted, setMusicStarted] = useState(false);
   const [content, setContent] = useState<any>(defaultData);
 
   useEffect(() => {
@@ -35,12 +36,19 @@ export default function Home() {
 
   return (
     <>
-      <Splash hero={content.hero as any} theme={content.theme.sections.splash} onOpen={handleOpen} />
+      <Splash 
+        hero={content.hero as any} 
+        theme={content.theme.sections.splash} 
+        onOpen={handleOpen} 
+        onInteraction={() => setMusicStarted(true)}
+      />
+      
+      {/* The MusicPlayer is now mounted early to ensure it's ready when the button is clicked */}
+      <MusicPlayer src={content.music || ""} play={musicStarted} />
       
       {/* The main content that's hidden behind the splash until opened */}
       <div className={`relative ${isOpened ? "overflow-y-auto" : "overflow-hidden h-screen"}`}>
         {isOpened && <PaperPlaneGuide />}
-        {isOpened && <MusicPlayer src={content.music || ""} autoPlay={true} />}
         <Hero data={content as any} theme={content.theme.sections.hero} />
         <Couple couple={content.couple as any} theme={content.theme.sections.couple} />
         <Events events={content.events as any} theme={content.theme.sections.events} />

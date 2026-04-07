@@ -2,16 +2,15 @@
 
 import { useRef, useState, useEffect } from "react";
 
-export default function MusicPlayer({ src, autoPlay }: { src: string; autoPlay: boolean }) {
+export default function MusicPlayer({ src, play }: { src: string; play?: boolean }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    if (autoPlay && audioRef.current && src) {
-      const p = audioRef.current.play();
-      if (p) p.then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+    if (play && audioRef.current && src && !isPlaying) {
+      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
     }
-  }, [autoPlay, src]);
+  }, [play, src, isPlaying]);
 
   const toggle = () => {
     if (!audioRef.current) return;
