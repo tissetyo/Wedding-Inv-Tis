@@ -38,8 +38,8 @@ export default function LoveStory({ story, theme }: { story: ContentData["loveSt
     <section 
       id="love-story"
       ref={container} 
-      className="h-screen w-full relative text-[var(--color-text)] overflow-hidden flex flex-col justify-center"
-      style={{ backgroundColor: theme?.backgroundColor || "var(--color-bg)" }}
+      className="h-screen w-full relative text-[var(--color-text)] overflow-hidden flex flex-col justify-center z-20 backdrop-blur-sm"
+      style={{ backgroundColor: theme?.backgroundColor ? `${theme.backgroundColor}CC` : "rgba(10, 10, 10, 0.8)" }}
     >
       {/* Background Section Override */}
       {theme?.backgroundType === "image" && theme?.backgroundImage && (
