@@ -54,8 +54,8 @@ export default function PaperPlaneGuide({
         
         if(titleEl) {
           const tRect = titleEl.getBoundingClientRect();
-          startX = tRect.right + 30; // Perch right next to the title
-          startY = tRect.top + window.scrollY - 20; // Slightly above
+          startX = tRect.right + 20; // Perch precisely at right corner of Mempelai text
+          startY = tRect.top + window.scrollY - 30; // Hover just above it
         }
 
         let pathCoords: {x: number, y: number}[] = [
@@ -67,10 +67,21 @@ export default function PaperPlaneGuide({
           const st = window.scrollY;
           
           if (sec.id === 'love-story') {
-            // Drop a relatively vertical stable line down the right corner so it feels perched, not erratic, during horizontal scroll
-            pathCoords.push({ x: w * 0.85, y: rect.top + st + 150 });
-            pathCoords.push({ x: w * 0.8, y: rect.top + st + (rect.height * 0.5) });
-            pathCoords.push({ x: w * 0.85, y: rect.top + st + rect.height - 150 });
+            const lsTitleEl = document.getElementById('love-story-title');
+            let lsX = w * 0.85;
+            let lsY = rect.top + st + 150;
+            
+            if (lsTitleEl) {
+               const lRect = lsTitleEl.getBoundingClientRect();
+               lsX = lRect.right + 30;
+               lsY = lRect.top + st; 
+            }
+            
+            // To completely stop the flight and draw NO further trail line during horizontal scroll,
+            // we give it coordinates that are almost identical. 
+            // The mask progress continues over the scroll, but traces practically 0 distance.
+            pathCoords.push({ x: lsX, y: lsY });
+            pathCoords.push({ x: lsX, y: lsY + 1 });
           } else {
             // Wide vintage zig zag sweeping physically behind the polaroids and tickets
             const x = i % 2 === 0 ? w * 0.8 : w * 0.2;

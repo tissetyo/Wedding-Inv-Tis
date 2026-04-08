@@ -50,7 +50,7 @@ export default function LoveStory({ story, theme }: { story: ContentData["loveSt
       )}
 
       <div className="absolute top-32 left-0 w-full text-center z-10">
-        <h2 className="font-sans text-[10px] tracking-[0.3em] uppercase text-current/60 mb-4">Cerita Cinta</h2>
+        <h2 id="love-story-title" className="font-sans text-[10px] tracking-[0.3em] uppercase text-current/60 mb-4">Cerita Cinta</h2>
         <div className="h-[1px] w-8 bg-current/20 mx-auto" />
       </div>
 
