@@ -3,6 +3,9 @@ export interface ThemeConfig {
   accentColor: string;
   guideIcon?: 'plane' | 'leaf' | 'feather' | 'sparkles' | 'custom';
   guideImage?: string;
+  guideRotation?: number;
+  guideAnimation?: 'breathing' | 'spinning' | 'wobbling' | 'flipping';
+  guideAnimationSpeed?: 'slow' | 'normal' | 'fast';
 }
 
 export interface HeroConfig {

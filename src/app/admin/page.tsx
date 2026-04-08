@@ -360,6 +360,42 @@ export default function AdminPage() {
                     />
                   </div>
                 )}
+                <div className="mt-6 pt-6 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  <div className="min-w-0">
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Icon Rotation (Degrees)</label>
+                    <input 
+                      type="number" 
+                      value={content.theme.global.guideRotation || 0}
+                      onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, guideRotation: parseInt(e.target.value) || 0}}})}
+                      className="w-full p-2.5 border border-gray-200 rounded-lg text-sm bg-gray-50 font-mono"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Icon Animation</label>
+                    <select 
+                      value={content.theme.global.guideAnimation || 'breathing'}
+                      onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, guideAnimation: e.target.value}}})}
+                      className="w-full p-2.5 border border-gray-200 rounded-lg text-sm bg-gray-50 uppercase font-mono"
+                    >
+                      <option value="breathing">Breathing</option>
+                      <option value="spinning">Spinning</option>
+                      <option value="wobbling">Wobbling</option>
+                      <option value="flipping">Flipping</option>
+                    </select>
+                  </div>
+                  <div className="min-w-0">
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Animation Speed</label>
+                    <select 
+                      value={content.theme.global.guideAnimationSpeed || 'normal'}
+                      onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, guideAnimationSpeed: e.target.value}}})}
+                      className="w-full p-2.5 border border-gray-200 rounded-lg text-sm bg-gray-50 uppercase font-mono"
+                    >
+                      <option value="slow">Slow</option>
+                      <option value="normal">Normal</option>
+                      <option value="fast">Fast</option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
               <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">

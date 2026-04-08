@@ -11,9 +11,24 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP);
 }
 
-export default function PaperPlaneGuide({ icon = 'plane', customImage }: { icon?: string, customImage?: string }) {
+interface GuideProps {
+  icon?: string;
+  customImage?: string;
+  rotation?: number;
+  animation?: 'breathing' | 'spinning' | 'wobbling' | 'flipping';
+  speed?: 'slow' | 'normal' | 'fast';
+}
+
+export default function PaperPlaneGuide({ 
+  icon = 'plane', 
+  customImage, 
+  rotation = 0, 
+  animation = 'breathing', 
+  speed = 'normal' 
+}: GuideProps) {
   const container = useRef<HTMLDivElement>(null);
   const planeRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
   const [docHeight, setDocHeight] = useState(6000); // Guessed height, will be updated natively
 
@@ -106,14 +121,20 @@ export default function PaperPlaneGuide({ icon = 'plane', customImage }: { icon?
           ease: "none",
         });
 
-        // Breathing loop
-        gsap.to(planeRef.current, {
-          scale: 1.2,
-          yoyo: true,
-          repeat: -1,
-          duration: 1,
-          ease: "sine.inOut"
-        });
+        // Custom animations on the inner wrapper to avoid fighting motionPath
+        const duration = speed === 'fast' ? 0.5 : speed === 'slow' ? 2 : 1;
+        gsap.killTweensOf(innerRef.current);
+
+        if (animation === 'spinning') {
+          gsap.to(innerRef.current, { rotation: 360, repeat: -1, duration: duration * 2, ease: "linear" });
+        } else if (animation === 'wobbling') {
+          gsap.to(innerRef.current, { rotation: 15, yoyo: true, repeat: -1, duration: duration / 2, ease: "sine.inOut" });
+        } else if (animation === 'flipping') {
+          gsap.to(innerRef.current, { rotateY: 180, repeat: -1, yoyo: true, duration: duration, ease: "power1.inOut" });
+        } else {
+          // Default Breathing loop
+          gsap.to(innerRef.current, { scale: 1.2, yoyo: true, repeat: -1, duration: duration, ease: "sine.inOut" });
+        }
 
       }, 1500);
 
@@ -152,14 +173,16 @@ export default function PaperPlaneGuide({ icon = 'plane', customImage }: { icon?
         ref={planeRef} 
         className="absolute top-0 left-0 w-10 h-10 text-[#f4f1ea] drop-shadow-[0_5px_15px_rgba(244,241,234,0.6)] z-10 flex justify-center items-center"
       >
-        <div className="rotate-45 translate-x-1 -translate-y-1">
-          {(() => {
-            if (icon === 'custom' && customImage) {
-               return <img src={customImage} alt="Guide Icon" className="w-12 h-12 object-contain filter drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]" />;
-            }
-            const IconComponent = icon === 'leaf' ? Leaf : icon === 'feather' ? Feather : icon === 'sparkles' ? Sparkles : Send;
-            return <IconComponent className="w-full h-full" strokeWidth={1.5} fill="#f4f1ea" />;
-          })()}
+        <div ref={innerRef} className="w-full h-full">
+          <div className="w-full h-full" style={{ transform: `rotate(${45 + rotation}deg) translate(2px, -2px)` }}>
+            {(() => {
+              if (icon === 'custom' && customImage) {
+                 return <img src={customImage} alt="Guide Icon" className="w-12 h-12 object-contain filter drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]" />;
+              }
+              const IconComponent = icon === 'leaf' ? Leaf : icon === 'feather' ? Feather : icon === 'sparkles' ? Sparkles : Send;
+              return <IconComponent className="w-full h-full" strokeWidth={1.5} fill="#f4f1ea" />;
+            })()}
+          </div>
         </div>
       </div>
 
