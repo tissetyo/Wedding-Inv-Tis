@@ -15,8 +15,8 @@ interface GuideProps {
   icon?: string;
   customImage?: string;
   rotation?: number;
-  animation?: 'breathing' | 'spinning' | 'wobbling' | 'flipping';
-  speed?: 'slow' | 'normal' | 'fast';
+  animation?: 'breathing' | 'spinning' | 'wobbling' | 'flipping' | 'fluttering' | 'floating' | 'twinkling' | 'barrel-roll' | 'zigzag' | 'heartbeat' | 'pendulum' | 'bouncing' | string;
+  speed?: 'slow' | 'normal' | 'fast' | string;
 }
 
 export default function PaperPlaneGuide({ 
@@ -122,18 +122,55 @@ export default function PaperPlaneGuide({
         });
 
         // Custom animations on the inner wrapper to avoid fighting motionPath
-        const duration = speed === 'fast' ? 0.5 : speed === 'slow' ? 2 : 1;
+        const duration = speed === 'fast' ? 0.3 : speed === 'slow' ? 2 : 1;
         gsap.killTweensOf(innerRef.current);
 
-        if (animation === 'spinning') {
-          gsap.to(innerRef.current, { rotation: 360, repeat: -1, duration: duration * 2, ease: "linear" });
-        } else if (animation === 'wobbling') {
-          gsap.to(innerRef.current, { rotation: 15, yoyo: true, repeat: -1, duration: duration / 2, ease: "sine.inOut" });
-        } else if (animation === 'flipping') {
-          gsap.to(innerRef.current, { rotateY: 180, repeat: -1, yoyo: true, duration: duration, ease: "power1.inOut" });
-        } else {
-          // Default Breathing loop
-          gsap.to(innerRef.current, { scale: 1.2, yoyo: true, repeat: -1, duration: duration, ease: "sine.inOut" });
+        switch(animation) {
+          case 'spinning':
+            gsap.to(innerRef.current, { rotation: 360, repeat: -1, duration: duration * 2, ease: "linear" });
+            break;
+          case 'wobbling':
+            gsap.to(innerRef.current, { rotation: 25, yoyo: true, repeat: -1, duration: duration, ease: "sine.inOut" });
+            break;
+          case 'flipping':
+            gsap.to(innerRef.current, { rotateY: 180, repeat: -1, yoyo: true, duration: duration, ease: "power1.inOut" });
+            break;
+          case 'fluttering':
+            // Fast scale and Y jitter + rapid flip for butterfly effect
+            gsap.to(innerRef.current, { scaleY: 0.3, yoyo: true, repeat: -1, duration: duration * 0.2, ease: "sine.inOut" });
+            gsap.to(innerRef.current, { y: -10, yoyo: true, repeat: -1, duration: duration * 0.5, ease: "sine.inOut" });
+            break;
+          case 'floating':
+            gsap.to(innerRef.current, { y: -15, rotation: 5, yoyo: true, repeat: -1, duration: duration * 1.5, ease: "sine.inOut" });
+            break;
+          case 'twinkling':
+            gsap.to(innerRef.current, { opacity: 0.3, scale: 0.8, yoyo: true, repeat: -1, duration: duration * 0.4, ease: "sine.inOut" });
+            break;
+          case 'barrel-roll':
+            gsap.to(innerRef.current, { rotateX: 360, repeat: -1, duration: duration, ease: "linear" });
+            break;
+          case 'zigzag':
+            gsap.to(innerRef.current, { x: 10, y: -10, yoyo: true, repeat: -1, duration: duration * 0.2, ease: "rough({strength: 2, points: 10})" });
+            break;
+          case 'heartbeat':
+            const tl = gsap.timeline({ repeat: -1 });
+            tl.to(innerRef.current, { scale: 1.3, duration: duration * 0.2, ease: "power1.out" })
+              .to(innerRef.current, { scale: 1, duration: duration * 0.2, ease: "power1.in" })
+              .to(innerRef.current, { scale: 1.3, duration: duration * 0.2, ease: "power1.out" })
+              .to(innerRef.current, { scale: 1, duration: duration * 0.8, ease: "power1.in" });
+            break;
+          case 'pendulum':
+            // Assume top anchor for pendulum via CSS, but we can just rock it
+            gsap.set(innerRef.current, { transformOrigin: "50% -100%" });
+            gsap.fromTo(innerRef.current, { rotation: -30 }, { rotation: 30, yoyo: true, repeat: -1, duration: duration * 1.5, ease: "sine.inOut" });
+            break;
+          case 'bouncing':
+            gsap.to(innerRef.current, { y: -20, scaleY: 1.05, yoyo: true, repeat: -1, duration: duration * 0.5, ease: "circ.out" });
+            break;
+          case 'breathing':
+          default:
+            gsap.to(innerRef.current, { scale: 1.2, yoyo: true, repeat: -1, duration: duration, ease: "sine.inOut" });
+            break;
         }
 
       }, 1500);

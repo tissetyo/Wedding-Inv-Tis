@@ -4,7 +4,7 @@ export interface ThemeConfig {
   guideIcon?: 'plane' | 'leaf' | 'feather' | 'sparkles' | 'custom';
   guideImage?: string;
   guideRotation?: number;
-  guideAnimation?: 'breathing' | 'spinning' | 'wobbling' | 'flipping';
+  guideAnimation?: 'breathing' | 'spinning' | 'wobbling' | 'flipping' | 'fluttering' | 'floating' | 'twinkling' | 'barrel-roll' | 'zigzag' | 'heartbeat' | 'pendulum' | 'bouncing';
   guideAnimationSpeed?: 'slow' | 'normal' | 'fast';
 }
 

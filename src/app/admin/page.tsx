@@ -379,8 +379,16 @@ export default function AdminPage() {
                     >
                       <option value="breathing">Breathing</option>
                       <option value="spinning">Spinning</option>
-                      <option value="wobbling">Wobbling</option>
-                      <option value="flipping">Flipping</option>
+                      <option value="wobbling">Wobbling (Leaf)</option>
+                      <option value="flipping">Flipping (Coin)</option>
+                      <option value="fluttering">Fluttering (Butterfly)</option>
+                      <option value="floating">Floating (Balloon)</option>
+                      <option value="twinkling">Twinkling (Star)</option>
+                      <option value="barrel-roll">Barrel Roll</option>
+                      <option value="zigzag">Zigzag</option>
+                      <option value="heartbeat">Heartbeat</option>
+                      <option value="pendulum">Pendulum</option>
+                      <option value="bouncing">Bouncing</option>
                     </select>
                   </div>
                   <div className="min-w-0">
