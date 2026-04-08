@@ -131,8 +131,8 @@ export default function PaperPlaneGuide({
           
           gsap.to(maskLine, {
             scrollTrigger: {
-              trigger: mempelaiTitle ? mempelaiTitle : sections[1],
-              start: "top top", // Trigger when the title hits the absolute top of the screen (i.e. leaving the header)
+              trigger: sections[1],
+              start: "top 80%", // Trigger when the polaroids come into frame
               end: () => "+=" + (totalHeight - sections[1].offsetTop),
               scrub: 1,
             },
@@ -144,8 +144,8 @@ export default function PaperPlaneGuide({
         // ── 6. Bind plane to motionPath ──
         gsap.to(planeRef.current, {
           scrollTrigger: {
-            trigger: mempelaiTitle ? mempelaiTitle : sections[1],
-            start: "top top", // Delay flight until the header leaves the screen
+            trigger: sections[1],
+            start: "top 80%", // Synchronize with the photo reveal
             end: () => "+=" + (totalHeight - sections[1].offsetTop),
             scrub: 1,
           },
