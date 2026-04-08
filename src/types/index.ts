@@ -6,6 +6,7 @@ export interface ThemeConfig {
   guideRotation?: number;
   guideAnimation?: 'breathing' | 'spinning' | 'wobbling' | 'flipping' | 'fluttering' | 'floating' | 'twinkling' | 'barrel-roll' | 'zigzag' | 'heartbeat' | 'pendulum' | 'bouncing';
   guideAnimationSpeed?: 'slow' | 'normal' | 'fast';
+  guideTrigger?: number;
 }
 
 export interface HeroConfig {

@@ -17,6 +17,7 @@ interface GuideProps {
   rotation?: number;
   animation?: 'breathing' | 'spinning' | 'wobbling' | 'flipping' | 'fluttering' | 'floating' | 'twinkling' | 'barrel-roll' | 'zigzag' | 'heartbeat' | 'pendulum' | 'bouncing' | string;
   speed?: 'slow' | 'normal' | 'fast' | string;
+  trigger?: number;
 }
 
 export default function PaperPlaneGuide({ 
@@ -24,7 +25,8 @@ export default function PaperPlaneGuide({
   customImage, 
   rotation = 0, 
   animation = 'breathing', 
-  speed = 'normal' 
+  speed = 'normal',
+  trigger = 10
 }: GuideProps) {
   const container = useRef<HTMLDivElement>(null);
   const planeRef = useRef<HTMLDivElement>(null);
@@ -132,7 +134,7 @@ export default function PaperPlaneGuide({
           gsap.to(maskLine, {
             scrollTrigger: {
               trigger: mempelaiTitle ? mempelaiTitle : sections[1],
-              start: "top 10%", // Trigger when the title is almost leaving the screen at the top
+              start: `top ${trigger}%`, // Customizable trigger point
               end: () => "+=" + (totalHeight - sections[1].offsetTop),
               scrub: 1,
             },
@@ -145,7 +147,7 @@ export default function PaperPlaneGuide({
         gsap.to(planeRef.current, {
           scrollTrigger: {
             trigger: mempelaiTitle ? mempelaiTitle : sections[1],
-            start: "top 10%", // Fly when the title is near the top edge
+            start: `top ${trigger}%`, // Customizable trigger point
             end: () => "+=" + (totalHeight - sections[1].offsetTop),
             scrub: 1,
           },

@@ -399,7 +399,7 @@ export default function AdminPage() {
                     </select>
                   </div>
                   <div className="min-w-0">
-                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Animation Speed</label>
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 font-mono">Animation Speed</label>
                     <select 
                       value={content.theme.global.guideAnimationSpeed || 'normal'}
                       onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, guideAnimationSpeed: e.target.value}}})}
@@ -409,6 +409,24 @@ export default function AdminPage() {
                       <option value="normal">Normal</option>
                       <option value="fast">Fast</option>
                     </select>
+                  </div>
+                  <div className="min-w-0 sm:col-span-3 lg:col-span-1">
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 font-mono">
+                      Flight Start Trigger: {100 - (content.theme.global.guideTrigger || 10)}% (Higher = Earlier)
+                    </label>
+                    <input 
+                      type="range"
+                      min="0"
+                      max="100"
+                      step="5"
+                      value={100 - (content.theme.global.guideTrigger || 10)}
+                      onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, guideTrigger: 100 - parseInt(e.target.value)}}})}
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    />
+                    <div className="flex justify-between text-[8px] text-gray-400 uppercase mt-1 px-1">
+                      <span>Late</span>
+                      <span>Early</span>
+                    </div>
                   </div>
                 </div>
               </div>

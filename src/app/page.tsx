@@ -54,6 +54,7 @@ export default function Home() {
           rotation={content.theme.global.guideRotation}
           animation={content.theme.global.guideAnimation}
           speed={content.theme.global.guideAnimationSpeed}
+          trigger={content.theme.global.guideTrigger}
         />}
         <Hero data={content as any} theme={content.theme.sections.hero} />
         <Couple couple={content.couple as any} theme={content.theme.sections.couple} />
