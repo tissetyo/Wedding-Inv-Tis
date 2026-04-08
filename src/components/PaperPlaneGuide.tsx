@@ -132,7 +132,7 @@ export default function PaperPlaneGuide({
           gsap.to(maskLine, {
             scrollTrigger: {
               trigger: mempelaiTitle ? mempelaiTitle : sections[1],
-              start: "top 30%", // Trigger slightly after the title passes the upper-middle of the screen
+              start: "top 10%", // Trigger when the title is almost leaving the screen at the top
               end: () => "+=" + (totalHeight - sections[1].offsetTop),
               scrub: 1,
             },
@@ -145,7 +145,7 @@ export default function PaperPlaneGuide({
         gsap.to(planeRef.current, {
           scrollTrigger: {
             trigger: mempelaiTitle ? mempelaiTitle : sections[1],
-            start: "top 30%", // Delay flight until the user has scrolled slightly past the title
+            start: "top 10%", // Fly when the title is near the top edge
             end: () => "+=" + (totalHeight - sections[1].offsetTop),
             scrub: 1,
           },
