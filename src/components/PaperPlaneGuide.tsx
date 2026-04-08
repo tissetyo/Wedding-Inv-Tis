@@ -30,81 +30,104 @@ export default function PaperPlaneGuide({
   const planeRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
-  const [docHeight, setDocHeight] = useState(6000); // Guessed height, will be updated natively
+  const [docHeight, setDocHeight] = useState(6000);
 
   useGSAP(
     () => {
-      // 1.5s delay to ensure robust layout calculations after the splash screen fully un-mounts
       const timer = setTimeout(() => {
         if (!planeRef.current || !pathRef.current) return;
 
         const sections = gsap.utils.toArray("section") as HTMLElement[];
-        if(sections.length < 2) return;
+        if (sections.length < 2) return;
         
         const w = window.innerWidth;
         const totalHeight = document.documentElement.scrollHeight;
         setDocHeight(totalHeight);
+        const st = window.scrollY;
         
-        // Slice out Hero (index 0) so the path physically starts exactly exclusively at Mempelai (index 1)
-        const guideSections = sections.slice(1);
+        // ── 1. Find the Mempelai title to use as starting perch ──
+        const mempelaiTitle = document.getElementById('mempelai-title');
+        let perchX = w * 0.5;
+        let perchY = sections[1].getBoundingClientRect().top + st + 50;
         
-        const titleEl = document.getElementById('mempelai-title');
-        let startX = w * 0.5;
-        let startY = sections[1].getBoundingClientRect().top + window.scrollY + 50;
+        if (mempelaiTitle) {
+          const r = mempelaiTitle.getBoundingClientRect();
+          // Center-X of the title text + offset to the right
+          perchX = r.left + r.width / 2 + r.width / 2 + 25;
+          perchY = r.top + st + r.height / 2;
+        }
         
-        if(titleEl) {
-          const tRect = titleEl.getBoundingClientRect();
-          startX = tRect.right + 20; // Perch precisely at right corner of Mempelai text
-          startY = tRect.top + window.scrollY - 30; // Hover just above it
+        // ── 2. Find the Cerita Cinta title for the second perch ──
+        const lsTitle = document.getElementById('love-story-title');
+        const lsSection = document.getElementById('love-story');
+        let lsPerchX = w * 0.5;
+        let lsPerchY = 0;
+        let lsSectionTop = 0;
+        let lsSectionBottom = 0;
+        
+        if (lsSection) {
+          const lsRect = lsSection.getBoundingClientRect();
+          lsSectionTop = lsRect.top + st;
+          lsSectionBottom = lsRect.bottom + st;
+        }
+        
+        if (lsTitle) {
+          const r = lsTitle.getBoundingClientRect();
+          lsPerchX = r.left + r.width / 2 + r.width / 2 + 25;
+          lsPerchY = r.top + st + r.height / 2;
+        } else if (lsSection) {
+          lsPerchX = w * 0.5;
+          lsPerchY = lsSectionTop + 160;
         }
 
-        let pathCoords: {x: number, y: number}[] = [
-          { x: startX, y: startY } // Anchor starting point 
-        ];
-
-        guideSections.forEach((sec: any, i: number) => {
+        // ── 3. Build path segments ──
+        // The strategy: build 3 separate paths
+        //   Path A: perch → fly through sections before love-story → arrive at love-story perch
+        //   Path B: (skip / invisible) love-story perch stays put, no trail
+        //   Path C: love-story perch → fly through remaining sections → footer
+        
+        // Collect sections before, during, and after love-story
+        const guideSections = sections.slice(1); // skip Hero
+        const beforeLS: {x: number, y: number}[] = [];
+        const afterLS: {x: number, y: number}[] = [];
+        let lsIndex = -1;
+        
+        guideSections.forEach((sec, i) => {
           const rect = sec.getBoundingClientRect();
-          const st = window.scrollY;
-          
           if (sec.id === 'love-story') {
-            const lsTitleEl = document.getElementById('love-story-title');
-            let lsX = w * 0.85;
-            let lsY = rect.top + st + 150;
-            
-            if (lsTitleEl) {
-               const lRect = lsTitleEl.getBoundingClientRect();
-               lsX = lRect.right + 30;
-               lsY = lRect.top + st; 
-            }
-            
-            // To completely stop the flight and draw NO further trail line during horizontal scroll,
-            // we give it coordinates that are almost identical. 
-            // The mask progress continues over the scroll, but traces practically 0 distance.
-            pathCoords.push({ x: lsX, y: lsY });
-            pathCoords.push({ x: lsX, y: lsY + 1 });
+            lsIndex = i;
+            return;
+          }
+          const x = i % 2 === 0 ? w * 0.8 : w * 0.2;
+          const y = rect.top + st + (rect.height / 2);
+          if (lsIndex === -1) {
+            beforeLS.push({ x, y });
           } else {
-            // Wide vintage zig zag sweeping physically behind the polaroids and tickets
-            const x = i % 2 === 0 ? w * 0.8 : w * 0.2;
-            const y = rect.top + st + (rect.height / 2);
-            pathCoords.push({ x, y });
+            afterLS.push({ x, y });
           }
         });
+        
+        // Full path: start perch → before sections → arrive at LS perch → (stay) → leave LS perch → after sections → footer
+        const allCoords: {x: number, y: number}[] = [
+          { x: perchX, y: perchY },       // Start: perched on Mempelai
+          ...beforeLS,                      // Fly through intermediate sections
+          { x: lsPerchX, y: lsPerchY },   // Arrive at Cerita Cinta perch
+          { x: lsPerchX, y: lsPerchY },   // Stay perfectly still (duplicate point = no trail drawn)
+          ...afterLS,                       // Fly through remaining sections  
+          { x: w * 0.5, y: totalHeight + 100 } // Exit into footer
+        ];
 
-        // Send gracefully into the footer
-        pathCoords.push({ x: w * 0.5, y: totalHeight + 100 });
-
-        // 1. Generate the strict SVG Bezier path
-        const rawPath = MotionPathPlugin.arrayToRawPath(pathCoords, { curviness: 1.2 });
+        // ── 4. Generate SVG path ──
+        const rawPath = MotionPathPlugin.arrayToRawPath(allCoords, { curviness: 1 });
         const svgD = MotionPathPlugin.rawPathToString(rawPath);
         
-        // 2. Set the path data on both the visible line and the invisible mask wrapper
         pathRef.current.setAttribute("d", svgD);
         const maskLine = document.getElementById("mask-line") as unknown as SVGPathElement;
-        if(maskLine) maskLine.setAttribute("d", svgD);
+        if (maskLine) maskLine.setAttribute("d", svgD);
 
-        // 3. Prepare the Mask Animation (reveals the dotted line natively)
+        // ── 5. Mask animation (reveals trail as you scroll) ──
         const pathLength = pathRef.current.getTotalLength();
-        if(maskLine) {
+        if (maskLine) {
           gsap.set(maskLine, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
           
           gsap.to(maskLine, {
@@ -119,12 +142,12 @@ export default function PaperPlaneGuide({
           });
         }
 
-        // 4. Bind the plane so it perfectly matches the tracing mask!
+        // ── 6. Bind plane to motionPath ──
         gsap.to(planeRef.current, {
           scrollTrigger: {
             trigger: sections[1],
-            start: "top center", // Only start rolling when Mempelai drops into the screen
-            end: () => "+=" + (totalHeight - sections[1].offsetTop), // End perfectly at bottom of document
+            start: "top center",
+            end: () => "+=" + (totalHeight - sections[1].offsetTop),
             scrub: 1,
           },
           motionPath: {
@@ -136,7 +159,7 @@ export default function PaperPlaneGuide({
           ease: "none",
         });
 
-        // Custom animations on the inner wrapper to avoid fighting motionPath
+        // ── 7. Icon micro-animation ──
         const duration = speed === 'fast' ? 0.3 : speed === 'slow' ? 2 : 1;
         gsap.killTweensOf(innerRef.current);
 
@@ -151,7 +174,6 @@ export default function PaperPlaneGuide({
             gsap.to(innerRef.current, { rotateY: 180, repeat: -1, yoyo: true, duration: duration, ease: "power1.inOut" });
             break;
           case 'fluttering':
-            // Fast scale and Y jitter + rapid flip for butterfly effect
             gsap.to(innerRef.current, { scaleY: 0.3, yoyo: true, repeat: -1, duration: duration * 0.2, ease: "sine.inOut" });
             gsap.to(innerRef.current, { y: -10, yoyo: true, repeat: -1, duration: duration * 0.5, ease: "sine.inOut" });
             break;
@@ -165,17 +187,17 @@ export default function PaperPlaneGuide({
             gsap.to(innerRef.current, { rotateX: 360, repeat: -1, duration: duration, ease: "linear" });
             break;
           case 'zigzag':
-            gsap.to(innerRef.current, { x: 10, y: -10, yoyo: true, repeat: -1, duration: duration * 0.2, ease: "rough({strength: 2, points: 10})" });
+            gsap.to(innerRef.current, { x: 10, y: -10, yoyo: true, repeat: -1, duration: duration * 0.2, ease: "steps(3)" });
             break;
-          case 'heartbeat':
+          case 'heartbeat': {
             const tl = gsap.timeline({ repeat: -1 });
             tl.to(innerRef.current, { scale: 1.3, duration: duration * 0.2, ease: "power1.out" })
               .to(innerRef.current, { scale: 1, duration: duration * 0.2, ease: "power1.in" })
               .to(innerRef.current, { scale: 1.3, duration: duration * 0.2, ease: "power1.out" })
               .to(innerRef.current, { scale: 1, duration: duration * 0.8, ease: "power1.in" });
             break;
+          }
           case 'pendulum':
-            // Assume top anchor for pendulum via CSS, but we can just rock it
             gsap.set(innerRef.current, { transformOrigin: "50% -100%" });
             gsap.fromTo(innerRef.current, { rotation: -30 }, { rotation: 30, yoyo: true, repeat: -1, duration: duration * 1.5, ease: "sine.inOut" });
             break;
@@ -198,11 +220,10 @@ export default function PaperPlaneGuide({
   return (
     <div ref={container} className="absolute inset-x-0 top-0 pointer-events-none z-10" style={{ height: docHeight }}>
       
-      {/* Extremely cool visible dotted line path stretching throughout your whole webpage! */}
+      {/* SVG trail path */}
       <svg className="absolute top-0 left-0 w-full h-full overflow-visible pointer-events-none z-0 shadow-lg">
         <defs>
           <mask id="line-mask">
-             {/* The white mask draws itself dynamically. White = visible. */}
              <path id="mask-line" d="" fill="none" stroke="white" strokeWidth="5" strokeLinecap="round" />
           </mask>
         </defs>
@@ -220,7 +241,7 @@ export default function PaperPlaneGuide({
         />
       </svg>
       
-      {/* Plane Container. It points straight (0deg) naturally so GSAP autoRotate maps seamlessly to the path trajectory! */}
+      {/* Flying icon */}
       <div 
         ref={planeRef} 
         className="absolute top-0 left-0 w-10 h-10 text-[#f4f1ea] drop-shadow-[0_5px_15px_rgba(244,241,234,0.6)] z-10 flex justify-center items-center"
