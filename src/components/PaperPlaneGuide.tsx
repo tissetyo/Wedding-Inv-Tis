@@ -11,7 +11,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP);
 }
 
-export default function PaperPlaneGuide({ icon = 'plane' }: { icon?: string }) {
+export default function PaperPlaneGuide({ icon = 'plane', customImage }: { icon?: string, customImage?: string }) {
   const container = useRef<HTMLDivElement>(null);
   const planeRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
@@ -43,10 +43,15 @@ export default function PaperPlaneGuide({ icon = 'plane' }: { icon?: string }) {
           const st = window.scrollY;
           
           if (sec.id === 'love-story') {
-            // Create a small circular loop
-            pathCoords.push({ x: w * 0.8, y: rect.top + st + rect.height * 0.25 });
-            pathCoords.push({ x: w * 0.2, y: rect.top + st + rect.height * 0.5 });
-            pathCoords.push({ x: w * 0.8, y: rect.top + st + rect.height * 0.75 });
+            // Literal swirl / loop-de-loop
+            const cy = rect.top + st + rect.height * 0.5;
+            pathCoords.push({ x: w * 0.8, y: cy - 100 });
+            pathCoords.push({ x: w * 0.9, y: cy });
+            pathCoords.push({ x: w * 0.8, y: cy + 100 });
+            pathCoords.push({ x: w * 0.3, y: cy + 100 });
+            pathCoords.push({ x: w * 0.2, y: cy });
+            pathCoords.push({ x: w * 0.3, y: cy - 100 });
+            pathCoords.push({ x: w * 0.5, y: cy - 50 });
           } else {
             // Wide vintage zig zag sweeping physically behind the polaroids and tickets
             const x = i % 2 === 0 ? w * 0.8 : w * 0.2;
@@ -149,6 +154,9 @@ export default function PaperPlaneGuide({ icon = 'plane' }: { icon?: string }) {
       >
         <div className="rotate-45 translate-x-1 -translate-y-1">
           {(() => {
+            if (icon === 'custom' && customImage) {
+               return <img src={customImage} alt="Guide Icon" className="w-12 h-12 object-contain filter drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]" />;
+            }
             const IconComponent = icon === 'leaf' ? Leaf : icon === 'feather' ? Feather : icon === 'sparkles' ? Sparkles : Send;
             return <IconComponent className="w-full h-full" strokeWidth={1.5} fill="#f4f1ea" />;
           })()}

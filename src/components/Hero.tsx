@@ -71,10 +71,10 @@ export default function Hero({ data, theme }: { data: ContentData; theme: any })
         </p>
         
         {/* Artistic Script Font */}
-        <h1 className="font-script text-7xl text-current leading-none mb-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" style={{ fontFamily: "var(--font-script)" }}>
-          {data.hero.groomName} <br/> 
-          <span className="font-serif text-5xl mx-4 text-[var(--color-accent)] inline-block my-2" style={{ fontFamily: "var(--font-serif)" }}>&</span> <br/>
-          {data.hero.brideName}
+        <h1 className="relative font-script text-7xl text-current leading-[1.2] mb-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] flex flex-col items-center" style={{ fontFamily: "var(--font-script)" }}>
+          <span className="z-10">{data.hero.groomName}</span>
+          <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-6xl text-[var(--color-accent)] opacity-80 z-0 pointer-events-none" style={{ fontFamily: "var(--font-serif)" }}>&</span>
+          <span className="z-10 mt-2">{data.hero.brideName}</span>
         </h1>
         
         <div className="w-[1px] h-12 bg-[var(--color-text)]/20 mb-8 mx-auto" />

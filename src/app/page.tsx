@@ -48,7 +48,7 @@ export default function Home() {
       
       {/* The main content that's hidden behind the splash until opened */}
       <div className={`relative ${isOpened ? "overflow-y-auto" : "overflow-hidden h-screen"}`}>
-        {isOpened && <PaperPlaneGuide icon={content.theme.global.guideIcon || 'plane'} />}
+        {isOpened && <PaperPlaneGuide icon={content.theme.global.guideIcon || 'plane'} customImage={content.theme.global.guideImage} />}
         <Hero data={content as any} theme={content.theme.sections.hero} />
         <Couple couple={content.couple as any} theme={content.theme.sections.couple} />
         <Events events={content.events as any} theme={content.theme.sections.events} />

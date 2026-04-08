@@ -1,7 +1,8 @@
 export interface ThemeConfig {
   primaryColor: string;
   accentColor: string;
-  guideIcon?: 'plane' | 'leaf' | 'feather' | 'sparkles';
+  guideIcon?: 'plane' | 'leaf' | 'feather' | 'sparkles' | 'custom';
+  guideImage?: string;
 }
 
 export interface HeroConfig {

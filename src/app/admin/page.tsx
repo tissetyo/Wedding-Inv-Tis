@@ -345,9 +345,21 @@ export default function AdminPage() {
                       <option value="leaf">Leaf</option>
                       <option value="feather">Feather</option>
                       <option value="sparkles">Sparkles</option>
+                      <option value="custom">Custom Image</option>
                     </select>
                   </div>
                 </div>
+                {content.theme.global.guideIcon === 'custom' && (
+                  <div className="mt-6 pt-6 border-t border-gray-100">
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Custom Guide Image</label>
+                    <p className="text-xs text-gray-500 mb-4">Specs: SVG or transparent PNG recommended. Max size: 100x100px. Upload below.</p>
+                    <ImageUpload 
+                      label="Upload Guide Icon"
+                      value={content.theme.global.guideImage || ''}
+                      onChange={(url) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, guideImage: url}}})}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">

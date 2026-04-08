@@ -6,12 +6,16 @@ import { Disc3 } from "lucide-react";
 export default function MusicPlayer({ src, play }: { src: string; play?: boolean }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const hasAutoPlayed = useRef(false);
 
   useEffect(() => {
-    if (play && audioRef.current && src && !isPlaying) {
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+    if (play && audioRef.current && src && !hasAutoPlayed.current) {
+      audioRef.current.play().then(() => {
+        setIsPlaying(true);
+        hasAutoPlayed.current = true;
+      }).catch(() => setIsPlaying(false));
     }
-  }, [play, src, isPlaying]);
+  }, [play, src]);
 
   const toggle = () => {
     if (!audioRef.current) return;
