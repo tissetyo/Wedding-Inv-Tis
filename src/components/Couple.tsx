@@ -51,7 +51,7 @@ export default function Couple({ couple, theme }: { couple: ContentData["couple"
       )}
 
       <div className="mb-10 text-center relative z-10">
-        <h2 className="font-sans text-[10px] tracking-[0.3em] uppercase text-current/60 mb-4">Mempelai</h2>
+        <h2 id="mempelai-title" className="font-sans text-[10px] tracking-[0.3em] uppercase text-current/60 mb-4">Mempelai</h2>
         <div className="h-[1px] w-8 bg-current/20 mx-auto" />
       </div>
 

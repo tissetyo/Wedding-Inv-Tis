@@ -48,9 +48,18 @@ export default function PaperPlaneGuide({
         // Slice out Hero (index 0) so the path physically starts exactly exclusively at Mempelai (index 1)
         const guideSections = sections.slice(1);
         
-        const mempelaiRect = sections[1].getBoundingClientRect();
+        const titleEl = document.getElementById('mempelai-title');
+        let startX = w * 0.5;
+        let startY = sections[1].getBoundingClientRect().top + window.scrollY + 50;
+        
+        if(titleEl) {
+          const tRect = titleEl.getBoundingClientRect();
+          startX = tRect.right + 30; // Perch right next to the title
+          startY = tRect.top + window.scrollY - 20; // Slightly above
+        }
+
         let pathCoords: {x: number, y: number}[] = [
-          { x: w * 0.5, y: mempelaiRect.top + window.scrollY - 100 } // Start securely hidden slightly above the polaroids
+          { x: startX, y: startY } // Anchor starting point 
         ];
 
         guideSections.forEach((sec: any, i: number) => {
@@ -58,15 +67,10 @@ export default function PaperPlaneGuide({
           const st = window.scrollY;
           
           if (sec.id === 'love-story') {
-            // Literal swirl / loop-de-loop
-            const cy = rect.top + st + rect.height * 0.5;
-            pathCoords.push({ x: w * 0.8, y: cy - 100 });
-            pathCoords.push({ x: w * 0.9, y: cy });
-            pathCoords.push({ x: w * 0.8, y: cy + 100 });
-            pathCoords.push({ x: w * 0.3, y: cy + 100 });
-            pathCoords.push({ x: w * 0.2, y: cy });
-            pathCoords.push({ x: w * 0.3, y: cy - 100 });
-            pathCoords.push({ x: w * 0.5, y: cy - 50 });
+            // Drop a relatively vertical stable line down the right corner so it feels perched, not erratic, during horizontal scroll
+            pathCoords.push({ x: w * 0.85, y: rect.top + st + 150 });
+            pathCoords.push({ x: w * 0.8, y: rect.top + st + (rect.height * 0.5) });
+            pathCoords.push({ x: w * 0.85, y: rect.top + st + rect.height - 150 });
           } else {
             // Wide vintage zig zag sweeping physically behind the polaroids and tickets
             const x = i % 2 === 0 ? w * 0.8 : w * 0.2;

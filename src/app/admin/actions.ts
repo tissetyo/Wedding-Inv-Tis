@@ -54,3 +54,17 @@ export async function saveContentAction(content: any) {
     return { success: false, error: err.message || "Unknown error occurred" };
   }
 }
+
+export async function deleteWishAction(id: string) {
+  try {
+    const { error } = await supabase.from("wedding_wishes").delete().eq("id", id);
+    if (error) {
+      console.error("Supabase Delete Error:", error);
+      return { success: false, error: error.message };
+    }
+    revalidatePath("/");
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message };
+  }
+}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import defaultData from "@/data/content.json";
-import { saveContentAction, uploadImageAction, uploadAudioAction } from "./actions";
+import { saveContentAction, uploadImageAction, uploadAudioAction, deleteWishAction } from "./actions";
 import { supabase } from "@/lib/supabase";
 
 // --- Components ---
@@ -111,6 +111,7 @@ export default function AdminPage() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [pin, setPin] = useState("");
   const [error, setError] = useState("");
+  const [wishes, setWishes] = useState<any[]>([]);
 
   const [activeTab, setActiveTab] = useState("design");
   const [content, setContent] = useState<any>(defaultData);
@@ -144,6 +145,11 @@ export default function AdminPage() {
       if (data && data.payload) {
         setContent(data.payload);
       }
+      
+      const { data: wishesData } = await supabase.from("wedding_wishes").select("*").order("created_at", { ascending: false });
+      if (wishesData) {
+        setWishes(wishesData);
+      }
     }
     fetchDB();
   }, [isAuthorized]);
@@ -170,6 +176,7 @@ export default function AdminPage() {
     { id: "loveStory", label: "Cerita Cinta", icon: "📜" },
     { id: "banking", label: "Amplop Digital", icon: "💳" },
     { id: "music", label: "Background Music", icon: "🎵" },
+    { id: "rsvp", label: "Guest Wishes", icon: "💌" },
     { id: "advanced", label: "Advanced JSON", icon: "⚙️" },
   ];
 
@@ -759,6 +766,75 @@ export default function AdminPage() {
                     </button>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+          
+          {/* --- RSVP & WISHES TAB --- */}
+          {activeTab === "rsvp" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div>
+                <h2 className="text-2xl font-black mb-2 tracking-tight">Guest Wishes & RSVP</h2>
+                <p className="text-sm text-gray-500 mb-8">Manage messages and attendance confirmations sent by guests.</p>
+              </div>
+
+              <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-gray-50 text-gray-500 uppercase text-[10px] font-black tracking-widest border-b border-gray-100">
+                      <tr>
+                        <th className="px-6 py-4">Date</th>
+                        <th className="px-6 py-4">Name</th>
+                        <th className="px-6 py-4">Status</th>
+                        <th className="px-6 py-4">Message</th>
+                        <th className="px-6 py-4 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {wishes.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
+                            No wishes received yet.
+                          </td>
+                        </tr>
+                      ) : (
+                        wishes.map((wish) => (
+                          <tr key={wish.id} className="hover:bg-gray-50/50 transition-colors">
+                            <td className="px-6 py-4 whitespace-nowrap text-gray-400 font-mono text-[11px]">
+                              {new Date(wish.created_at).toLocaleDateString("id-ID", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                            </td>
+                            <td className="px-6 py-4 font-bold max-w-[150px] truncate">{wish.name}</td>
+                            <td className="px-6 py-4">
+                              <span className={`inline-block px-2 text-[10px] font-bold uppercase tracking-wider rounded-full ${wish.attendance === 'hadir' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                {wish.attendance}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 max-w-[300px] text-gray-600">
+                              <p className="truncate block w-full" title={wish.message}>{wish.message}</p>
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <button
+                                onClick={async () => {
+                                  if(confirm("Are you sure you want to delete this wish?")) {
+                                    const res = await deleteWishAction(wish.id);
+                                    if(res.success) {
+                                      setWishes(wishes.filter(w => w.id !== wish.id));
+                                    } else {
+                                      alert("Failed to delete wish.");
+                                    }
+                                  }
+                                }}
+                                className="text-[10px] font-black text-red-400 uppercase tracking-widest hover:text-red-700 transition-colors p-2 bg-red-50 rounded-lg"
+                              >
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}

@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { supabase } from "@/lib/supabase";
+import confetti from "canvas-confetti";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -54,8 +55,35 @@ export default function RSVP({ theme }: { theme: any }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await supabase.from("wedding_wishes").insert([formData]);
+    
+    // Trigger spark animation
+    const rect = (e.target as any).getBoundingClientRect();
+    confetti({
+      particleCount: 50,
+      spread: 60,
+      origin: { 
+        x: (rect.left + rect.width / 2) / window.innerWidth, 
+        y: (rect.top + rect.height / 2) / window.innerHeight 
+      },
+      colors: ['#bfae91', '#ffffff', '#e6d5b8'],
+      ticks: 100,
+      gravity: 0.8,
+      shapes: ['circle'],
+      scalar: 0.6
+    });
+
+    const newWish = { 
+      id: Math.random().toString(), 
+      ...formData, 
+      created_at: new Date().toISOString() 
+    };
+
+    // Optimistically prepend to UI so user sees it instantly
+    setWishes(prev => [newWish, ...prev]);
     setIsSubmitted(true);
+    
+    await supabase.from("wedding_wishes").insert([formData]);
+    
     setFormData({ name: "", attendance: "hadir", message: "" });
     setTimeout(() => setIsSubmitted(false), 3000);
   };
