@@ -52,9 +52,8 @@ export default function PaperPlaneGuide({
         
         if (mempelaiTitle) {
           const r = mempelaiTitle.getBoundingClientRect();
-          // Center-X of the title text + offset to the right
-          perchX = r.left + r.width / 2 + r.width / 2 + 25;
-          perchY = r.top + st + r.height / 2;
+          perchX = r.right + 15; // Right exactly at the text boundary
+          perchY = r.top + st; // Right near the top/baseline of the text
         }
         
         // ── 2. Find the Cerita Cinta title for the second perch ──
@@ -73,8 +72,8 @@ export default function PaperPlaneGuide({
         
         if (lsTitle) {
           const r = lsTitle.getBoundingClientRect();
-          lsPerchX = r.left + r.width / 2 + r.width / 2 + 25;
-          lsPerchY = r.top + st + r.height / 2;
+          lsPerchX = r.right + 15;
+          lsPerchY = r.top + st;
         } else if (lsSection) {
           lsPerchX = w * 0.5;
           lsPerchY = lsSectionTop + 160;
@@ -132,8 +131,8 @@ export default function PaperPlaneGuide({
           
           gsap.to(maskLine, {
             scrollTrigger: {
-              trigger: sections[1],
-              start: "top center",
+              trigger: mempelaiTitle ? mempelaiTitle : sections[1],
+              start: "top top", // Trigger when the title hits the absolute top of the screen (i.e. leaving the header)
               end: () => "+=" + (totalHeight - sections[1].offsetTop),
               scrub: 1,
             },
@@ -145,8 +144,8 @@ export default function PaperPlaneGuide({
         // ── 6. Bind plane to motionPath ──
         gsap.to(planeRef.current, {
           scrollTrigger: {
-            trigger: sections[1],
-            start: "top center",
+            trigger: mempelaiTitle ? mempelaiTitle : sections[1],
+            start: "top top", // Delay flight until the header leaves the screen
             end: () => "+=" + (totalHeight - sections[1].offsetTop),
             scrub: 1,
           },
