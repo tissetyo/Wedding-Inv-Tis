@@ -1,7 +1,7 @@
 export interface ThemeConfig {
   primaryColor: string;
   accentColor: string;
-  guideIcon?: 'plane' | 'leaf' | 'feather' | 'sparkles' | 'custom';
+  guideIcon?: 'plane' | 'leaf' | 'feather' | 'sparkles' | 'custom' | 'butterfly';
   guideImage?: string;
   guideRotation?: number;
   guideAnimation?: 'breathing' | 'spinning' | 'wobbling' | 'flipping' | 'fluttering' | 'floating' | 'twinkling' | 'barrel-roll' | 'zigzag' | 'heartbeat' | 'pendulum' | 'bouncing';

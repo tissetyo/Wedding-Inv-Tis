@@ -345,17 +345,42 @@ export default function AdminPage() {
                     <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Guide Icon</label>
                     <select 
                       value={content.theme.global.guideIcon || 'plane'}
-                      onChange={(e) => setContent({...content, theme: {...content.theme, global: {...content.theme.global, guideIcon: e.target.value}}})}
+                      onChange={(e) => {
+                        const guideIcon = e.target.value;
+                        setContent({
+                          ...content,
+                          theme: {
+                            ...content.theme,
+                            global: {
+                              ...content.theme.global,
+                              guideIcon,
+                              guideImage: guideIcon === "butterfly" ? "/animations/butterfly-pet/rest-breathe.gif" : content.theme.global.guideImage,
+                            },
+                          },
+                        });
+                      }}
                       className="w-full p-2.5 border border-gray-200 rounded-lg text-sm bg-gray-50 uppercase font-mono"
                     >
                       <option value="plane">Paper Plane</option>
                       <option value="leaf">Leaf</option>
                       <option value="feather">Feather</option>
                       <option value="sparkles">Sparkles</option>
+                      <option value="butterfly">Butterfly GIF</option>
                       <option value="custom">Custom Image</option>
                     </select>
                   </div>
                 </div>
+                {content.theme.global.guideIcon === 'butterfly' && (
+                  <div className="mt-6 pt-6 border-t border-gray-100">
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Butterfly Guide</label>
+                    <div className="flex items-center gap-4 rounded-xl border border-amber-100 bg-amber-50/60 p-4">
+                      <img src="/animations/butterfly-pet/rest-breathe.gif" alt="Butterfly guide preview" className="h-16 w-16 object-contain" />
+                      <p className="text-xs leading-relaxed text-amber-900/70">
+                        Uses the local butterfly GIF set with dynamic left, right, and idle poses.
+                      </p>
+                    </div>
+                  </div>
+                )}
                 {content.theme.global.guideIcon === 'custom' && (
                   <div className="mt-6 pt-6 border-t border-gray-100">
                     <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Custom Guide Image</label>

@@ -5,7 +5,7 @@
       "textColor": "#f4f1ea",
       "accentColor": "#bfae91",
       "baseRadius": "8px",
-      "guideIcon": "custom",
+      "guideIcon": "butterfly",
       "guideImage": "/animations/butterfly-pet/rest-breathe.gif"
     },
     "sections": {

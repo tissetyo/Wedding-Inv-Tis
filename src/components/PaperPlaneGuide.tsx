@@ -40,6 +40,8 @@ export default function PaperPlaneGuide({
   const customImageRef = useRef<HTMLImageElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
   const [docHeight, setDocHeight] = useState(6000);
+  const isButterflyIcon = icon === 'butterfly';
+  const guideImage = isButterflyIcon ? BUTTERFLY_POSES.idle : customImage;
 
   useGSAP(
     () => {
@@ -151,7 +153,7 @@ export default function PaperPlaneGuide({
         }
 
         // ── 6. Bind plane to motionPath ──
-        const isButterflyGuide = icon === 'custom' && Boolean(customImage?.includes('butterfly'));
+        const isButterflyGuide = isButterflyIcon || (icon === 'custom' && Boolean(guideImage?.includes('butterfly')));
         let previousX = Number(gsap.getProperty(planeRef.current, "x")) || 0;
         let stillFrames = 0;
         let currentPose: keyof typeof BUTTERFLY_POSES = "idle";
@@ -281,16 +283,16 @@ export default function PaperPlaneGuide({
       {/* Flying icon */}
       <div 
         ref={planeRef} 
-        className={`absolute left-0 top-0 z-10 flex items-center justify-center text-[#f4f1ea] drop-shadow-[0_5px_15px_rgba(244,241,234,0.6)] ${icon === 'custom' ? 'h-16 w-16' : 'h-10 w-10'}`}
+        className={`absolute left-0 top-0 z-10 flex items-center justify-center text-[#f4f1ea] drop-shadow-[0_5px_15px_rgba(244,241,234,0.6)] ${icon === 'custom' || isButterflyIcon ? 'h-16 w-16' : 'h-10 w-10'}`}
       >
         <div ref={innerRef} className="w-full h-full">
-          <div className="w-full h-full" style={{ transform: `rotate(${icon === 'custom' ? rotation : 45 + rotation}deg) translate(2px, -2px)` }}>
+          <div className="w-full h-full" style={{ transform: `rotate(${icon === 'custom' || isButterflyIcon ? rotation : 45 + rotation}deg) translate(2px, -2px)` }}>
             {(() => {
-              if (icon === 'custom' && customImage) {
+              if ((icon === 'custom' || isButterflyIcon) && guideImage) {
                  return (
                    <img
                      ref={customImageRef}
-                     src={customImage}
+                     src={guideImage}
                      alt="Guide Icon"
                      className="h-16 w-[104px] max-w-none object-contain filter drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]"
                    />
