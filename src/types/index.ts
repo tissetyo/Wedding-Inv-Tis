@@ -35,6 +35,7 @@ export interface EventConfig {
   title: string;
   date: string;
   time: string;
+  timeSlots?: string[];
   locationName: string;
   address: string;
   mapLink: string;

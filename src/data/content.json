@@ -93,6 +93,10 @@
       "title": "Resepsi",
       "date": "2026-02-14",
       "time": "11:00 - 14:00 WIB",
+      "timeSlots": [
+        "11:00 - 14:00 WIB",
+        ""
+      ],
       "locationName": "Grand Ballroom Hotel Mulia",
       "address": "Jl. Asia Afrika Senayan, Jakarta Selatan",
       "mapLink": "https://maps.google.com"

@@ -41,56 +41,64 @@ export default function Events({ events, theme }: { events: EventConfig[]; theme
       </div>
 
       <div className="flex flex-col gap-12 items-center">
-        {events.map((event) => (
-          <div 
-            key={event.id} 
-            className="reveal-event border border-[var(--color-text)]/10 w-full max-w-[85%] p-8 bg-[var(--color-bg)]/50 backdrop-blur-sm"
-          >
-            <h3 className="font-serif text-2xl text-[#f4f1ea] mb-8">{event.title}</h3>
-            
-            <div className="flex flex-col gap-6 text-[#f4f1ea]/80 text-[11px] uppercase tracking-widest mb-10 w-full">
-              <div>
-                <p className="text-[#f4f1ea]/40 mb-1 tracking-[0.3em] text-[9px]">Date</p>
-                <p>{(() => { const d = new Date(event.date); return isNaN(d.getTime()) ? 'Segera diumumkan' : d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); })()}</p>
+        {events.map((event) => {
+          const timeSlots = (event.timeSlots?.length ? event.timeSlots : [event.time]).filter(Boolean);
+
+          return (
+            <div 
+              key={event.id} 
+              className="reveal-event border border-[var(--color-text)]/10 w-full max-w-[85%] p-8 bg-[var(--color-bg)]/50 backdrop-blur-sm"
+            >
+              <h3 className="font-serif text-2xl text-[#f4f1ea] mb-8">{event.title}</h3>
+              
+              <div className="flex flex-col gap-6 text-[#f4f1ea]/80 text-[11px] uppercase tracking-widest mb-10 w-full">
+                <div>
+                  <p className="text-[#f4f1ea]/40 mb-1 tracking-[0.3em] text-[9px]">Date</p>
+                  <p>{(() => { const d = new Date(event.date); return isNaN(d.getTime()) ? 'Segera diumumkan' : d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); })()}</p>
+                </div>
+                <div className="mx-auto h-[1px] w-10 bg-[#f4f1ea]/10" />
+                <div>
+                  <p className="text-[#f4f1ea]/40 mb-2 tracking-[0.3em] text-[9px]">Time</p>
+                  <div className="space-y-1">
+                    {timeSlots.map((slot, slotIndex) => (
+                      <p key={`${event.id}-time-${slotIndex}`}>{slot}</p>
+                    ))}
+                  </div>
+                </div>
+                <div className="mx-auto h-[1px] w-10 bg-[#f4f1ea]/10" />
+                <div>
+                  <p className="text-[#f4f1ea]/40 mb-1 tracking-[0.3em] text-[9px]">Location</p>
+                  <p className="mb-1">{event.locationName}</p>
+                  <p className="text-[#f4f1ea]/50 text-[9px] max-w-[80%] mx-auto">{event.address}</p>
+                </div>
               </div>
-              <div className="mx-auto h-[1px] w-10 bg-[#f4f1ea]/10" />
-              <div>
-                <p className="text-[#f4f1ea]/40 mb-1 tracking-[0.3em] text-[9px]">Time</p>
-                <p>{event.time}</p>
-              </div>
-              <div className="mx-auto h-[1px] w-10 bg-[#f4f1ea]/10" />
-              <div>
-                <p className="text-[#f4f1ea]/40 mb-1 tracking-[0.3em] text-[9px]">Location</p>
-                <p className="mb-1">{event.locationName}</p>
-                <p className="text-[#f4f1ea]/50 text-[9px] max-w-[80%] mx-auto">{event.address}</p>
-              </div>
+
+              {event.mapLink && (
+                <a 
+                  href={event.mapLink} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="inline-block border-b border-[#bfae91]/50 text-[#bfae91] pb-1 text-[9px] tracking-[0.3em] uppercase transition-colors hover:text-[#f4f1ea]"
+                >
+                  Lihat Maps →
+                </a>
+              )}
+
+              {(event.locationName || event.address) && (
+                <div className="mt-8 w-full overflow-hidden border border-[var(--color-text)]/10 opacity-70">
+                  <iframe
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent((event.locationName || '') + ', ' + (event.address || ''))}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                    className="w-full h-44 border-0 grayscale contrast-125 sepia-[0.2]"
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title={`Map - ${event.title}`}
+                  />
+                </div>
+              )}
             </div>
-
-            {event.mapLink && (
-              <a 
-                href={event.mapLink} 
-                target="_blank" 
-                rel="noreferrer"
-                className="inline-block border-b border-[#bfae91]/50 text-[#bfae91] pb-1 text-[9px] tracking-[0.3em] uppercase transition-colors hover:text-[#f4f1ea]"
-              >
-                Lihat Maps →
-              </a>
-            )}
-
-            {(event.locationName || event.address) && (
-              <div className="mt-8 w-full overflow-hidden border border-[var(--color-text)]/10 opacity-70">
-                <iframe
-                  src={`https://maps.google.com/maps?q=${encodeURIComponent((event.locationName || '') + ', ' + (event.address || ''))}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-                  className="w-full h-44 border-0 grayscale contrast-125 sepia-[0.2]"
-                  loading="lazy"
-                  allowFullScreen
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title={`Map - ${event.title}`}
-                />
-              </div>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

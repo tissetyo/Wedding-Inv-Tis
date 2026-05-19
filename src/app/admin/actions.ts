@@ -3,12 +3,30 @@
 import { supabase } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { v2 as cloudinary } from "cloudinary";
+import { createClient } from "@supabase/supabase-js";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+function getAdminSupabase() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_KEY ||
+    process.env.SUPABASE_SECRET_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey) return supabase;
+
+  return createClient(supabaseUrl, serviceRoleKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+}
 
 export async function uploadImageAction(base64Image: string) {
   try {
@@ -57,10 +75,10 @@ export async function saveContentAction(content: any) {
 
 export async function deleteWishAction(id: string) {
   try {
-    const { error } = await supabase.from("wedding_wishes").delete().eq("id", id);
+    const { error } = await getAdminSupabase().from("wedding_wishes").delete().eq("id", id);
     if (error) {
       console.error("Supabase Delete Error:", error);
-      return { success: false, error: error.message };
+      return { success: false, error: `${error.message} (Code: ${error.code})` };
     }
     revalidatePath("/");
     return { success: true };

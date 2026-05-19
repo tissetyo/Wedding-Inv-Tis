@@ -610,11 +610,38 @@ export default function AdminPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-bold text-gray-600 mb-2">Time Range</label>
-                      <input type="text" value={event.time || ""} placeholder="08:00 - 10:00 WIB" onChange={(e) => {
-                        const newEvents = [...content.events];
-                        newEvents[idx] = {...newEvents[idx], time: e.target.value};
-                        setContent({...content, events: newEvents});
-                      }} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-sm" />
+                      <div className="space-y-3">
+                        {(event.timeSlots?.length ? event.timeSlots : [event.time || ""]).map((slot: string, slotIdx: number) => (
+                          <div key={slotIdx} className="flex gap-2">
+                            <input type="text" value={slot || ""} placeholder={slotIdx === 0 ? "08:00 - 10:00 WIB" : "Contoh: 18:00 - 20:00 WIB"} onChange={(e) => {
+                              const newEvents = [...content.events];
+                              const timeSlots = (newEvents[idx].timeSlots?.length ? [...newEvents[idx].timeSlots] : [newEvents[idx].time || ""]);
+                              timeSlots[slotIdx] = e.target.value;
+                              newEvents[idx] = {...newEvents[idx], time: timeSlots[0] || "", timeSlots};
+                              setContent({...content, events: newEvents});
+                            }} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-sm" />
+                            {slotIdx > 0 && (
+                              <button type="button" onClick={() => {
+                                const newEvents = [...content.events];
+                                const timeSlots = (newEvents[idx].timeSlots?.length ? [...newEvents[idx].timeSlots] : [newEvents[idx].time || ""]).filter((_: string, i: number) => i !== slotIdx);
+                                newEvents[idx] = {...newEvents[idx], time: timeSlots[0] || "", timeSlots};
+                                setContent({...content, events: newEvents});
+                              }} className="px-3 rounded-xl border border-red-100 bg-red-50 text-xs font-black uppercase tracking-widest text-red-500">
+                                Remove
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                        <button type="button" onClick={() => {
+                          const newEvents = [...content.events];
+                          const timeSlots = newEvents[idx].timeSlots?.length ? [...newEvents[idx].timeSlots] : [newEvents[idx].time || ""];
+                          timeSlots.push("");
+                          newEvents[idx] = {...newEvents[idx], time: timeSlots[0] || "", timeSlots};
+                          setContent({...content, events: newEvents});
+                        }} className="w-full rounded-xl border border-dashed border-gray-300 py-2 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:border-blue-400 hover:text-blue-600">
+                          + Add Time Slot
+                        </button>
+                      </div>
                     </div>
                     <div>
                       <label className="block text-sm font-bold text-gray-600 mb-2">Venue Name</label>
@@ -863,7 +890,7 @@ export default function AdminPage() {
                                     if(res.success) {
                                       setWishes(wishes.filter(w => w.id !== wish.id));
                                     } else {
-                                      alert("Failed to delete wish.");
+                                      alert(`Failed to delete wish: ${res.error || "Unknown error"}`);
                                     }
                                   }
                                 }}
