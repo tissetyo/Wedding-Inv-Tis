@@ -1,0 +1,38 @@
+{
+  "name": "butterfly-pet",
+  "size": {
+    "hover": "320x320",
+    "motion": "520x320"
+  },
+  "style": "approved semi-realistic ivory champagne-gold butterfly",
+  "defaultAnimation": "hover-flap",
+  "preservedGood": {
+    "gif": "/animations/butterfly-good-hover.gif",
+    "webp": "/animations/butterfly-good-hover.webp"
+  },
+  "animations": {
+    "hover-flap": {
+      "gif": "/animations/butterfly-pet/hover-flap.gif",
+      "webp": "/animations/butterfly-pet/hover-flap.webp",
+      "frames": 7
+    },
+    "fly-right": {
+      "gif": "/animations/butterfly-pet/fly-right.gif",
+      "webp": "/animations/butterfly-pet/fly-right.webp",
+      "frames": 20,
+      "orientation": "right-facing side profile"
+    },
+    "fly-left": {
+      "gif": "/animations/butterfly-pet/fly-left.gif",
+      "webp": "/animations/butterfly-pet/fly-left.webp",
+      "frames": 20,
+      "orientation": "left-facing side profile"
+    },
+    "perch-object": {
+      "gif": "/animations/butterfly-pet/perch-object.gif",
+      "webp": "/animations/butterfly-pet/perch-object.webp",
+      "frames": 20
+    }
+  },
+  "sideFlightSource": "/animations/butterfly-side-right-spritesheet.png"
+}

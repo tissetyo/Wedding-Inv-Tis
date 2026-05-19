@@ -8,7 +8,30 @@ const lora = Lora({ subsets: ["latin"], variable: "--font-sans" });
 const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], style: ["normal", "italic"], variable: "--font-serif" });
 const vibes = Great_Vibes({ subsets: ["latin"], weight: "400", variable: "--font-script" });
 
-export const metadata: Metadata = { title: "The Wedding Of", description: "Wedding Invitation" };
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  title: "The Wedding Of Titis & Tyara",
+  description: "Wedding Invitation Titis & Tyara",
+  openGraph: {
+    title: "The Wedding Of Titis & Tyara",
+    description: "Wedding Invitation Titis & Tyara",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1254,
+        height: 1254,
+        alt: "Titis & Tyara Wedding Invitation",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Wedding Of Titis & Tyara",
+    description: "Wedding Invitation Titis & Tyara",
+    images: ["/og-image.png"],
+  },
+};
 
 export default async function RootLayout({
   children,

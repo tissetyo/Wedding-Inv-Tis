@@ -65,21 +65,21 @@ export default function Hero({ data, theme }: { data: ContentData; theme: any })
       <div className="absolute inset-0 opacity-40 pointer-events-none mix-blend-overlay z-20 bg-overlay" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/stardust.png')" }} />
       <div className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-screen z-20 bg-overlay" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/grunge-wall.png')" }} />
       
-      <div className="hero-content relative z-30 flex flex-col items-center text-center">
-        <p className="text-[var(--color-accent)]/80 font-sans tracking-[0.5em] uppercase text-[9px] mb-8">
+      <div className="hero-content relative z-30 flex -translate-y-16 flex-col items-center text-center">
+        <p className="mb-8 font-sans text-[9px] uppercase tracking-[0.5em] text-[#eadfc9] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
           Presenting
         </p>
         
         {/* Artistic Script Font */}
         <h1 className="relative font-script text-7xl text-current leading-[1.2] mb-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] flex flex-col items-center" style={{ fontFamily: "var(--font-script)" }}>
           <span className="z-10">{data.hero.groomName}</span>
-          <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-6xl text-[var(--color-accent)] opacity-80 z-0 pointer-events-none" style={{ fontFamily: "var(--font-serif)" }}>&</span>
+          <span className="pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 font-serif text-6xl text-[#d7c7a7] drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)]" style={{ fontFamily: "var(--font-serif)" }}>&</span>
           <span className="z-10 mt-2">{data.hero.brideName}</span>
         </h1>
         
-        <div className="w-[1px] h-12 bg-[var(--color-text)]/20 mb-8 mx-auto" />
+        <div className="mx-auto mb-8 h-12 w-[1px] bg-[#f4f1ea]/35 shadow-[0_0_10px_rgba(0,0,0,0.8)]" />
         
-        <p className="font-serif text-xs tracking-[0.3em] uppercase text-[var(--color-text)]/50">
+        <p className="font-serif text-xs uppercase tracking-[0.3em] text-[#eadfc9] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
           {(() => {
             const d = new Date(data.hero.date);
             return isNaN(d.getTime()) ? '' : d.toLocaleDateString('id-ID', {

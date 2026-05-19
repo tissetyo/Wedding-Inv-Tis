@@ -114,15 +114,15 @@ export default function Splash({
       <div className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-screen z-40 bg-overlay" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/grunge-wall.png')" }} />
       
       {/* Center Artistic Layout */}
-      <div className="relative z-30 flex flex-col items-center justify-center text-center px-12 h-screen center-content w-full">
-        <h2 className="text-[#bfae91]/80 font-sans tracking-[0.4em] text-[10px] uppercase mb-4 shadow-black drop-shadow-md">
+      <div className="relative z-30 flex h-screen w-full -translate-y-16 flex-col items-center justify-center px-12 text-center center-content">
+        <h2 className="mb-4 font-sans text-[10px] uppercase tracking-[0.4em] text-[#eadfc9] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
           {hero.title || "The Wedding Of"}
         </h2>
         
         {/* Massive Artistic Script matching the "The End" reference */}
         <h1 className="font-script text-6xl md:text-8xl text-[#f4f1ea] mb-2 leading-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)] whitespace-nowrap" style={{ fontFamily: "var(--font-script)" }}>
           {hero.groomName || "Andi"} <br/> 
-          <span className="text-4xl px-4 text-[#bfae91]">&</span> <br/>
+          <span className="px-4 text-4xl text-[#d7c7a7] drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)]">&</span> <br/>
           {hero.brideName || "Sari"}
         </h1>
         

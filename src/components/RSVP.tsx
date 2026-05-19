@@ -1,11 +1,10 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { supabase } from "@/lib/supabase";
-import confetti from "canvas-confetti";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -15,6 +14,7 @@ interface Wish { id: string; name: string; attendance: string; message: string; 
 
 export default function RSVP({ theme }: { theme: any }) {
   const container = useRef<HTMLDivElement>(null);
+  const thanksCard = useRef<HTMLDivElement>(null);
   
   const [wishes, setWishes] = useState<Wish[]>([]);
 
@@ -53,25 +53,70 @@ export default function RSVP({ theme }: { theme: any }) {
     { scope: container }
   );
 
+  const launchButterflyBurst = useCallback((origin: DOMRect) => {
+    const startX = origin.left + origin.width / 2;
+    const startY = origin.top + origin.height / 2;
+    const targets = Array.from({ length: 34 }, (_, index) => {
+      const columns = 6;
+      const column = index % columns;
+      const row = Math.floor(index / columns);
+      const directionSign = column < columns / 2 ? -1 : 1;
+      const xSpread = window.innerWidth * (0.2 + column * 0.12);
+      const x = directionSign * xSpread + ((row % 2) * 28 - 14);
+      const yPattern = [-window.innerHeight * 0.72, -window.innerHeight * 0.48, -window.innerHeight * 0.25, window.innerHeight * 0.18, window.innerHeight * 0.34, -window.innerHeight * 0.62];
+      const y = yPattern[index % yPattern.length] + row * 18;
+      const direction = x < 0 ? "left" : "right";
+      return {
+        x,
+        y,
+        rotate: (x < 0 ? -1 : 1) * (8 + (index % 6) * 6),
+        scale: 0.48 + (index % 6) * 0.08,
+        delay: (index % 8) * 80 + row * 110,
+        src: `/animations/butterfly-pet/fly-${direction}.gif`,
+      };
+    });
+
+    targets.forEach((butterfly) => {
+      const img = document.createElement("img");
+      img.src = butterfly.src;
+      img.alt = "";
+      img.setAttribute("aria-hidden", "true");
+      img.className = "pointer-events-none fixed z-[120] h-12 w-[78px] max-w-none object-contain drop-shadow-[0_0_10px_rgba(244,241,234,0.55)]";
+      img.style.left = `${startX - 45}px`;
+      img.style.top = `${startY - 28}px`;
+      img.style.opacity = "0";
+      document.body.appendChild(img);
+
+      img.animate(
+        [
+          { opacity: 0, transform: "translate3d(0, 0, 0) scale(0.25) rotate(0deg)" },
+          { opacity: 0.15, transform: `translate3d(${butterfly.x * 0.08}px, ${butterfly.y * 0.08}px, 0) scale(${butterfly.scale * 0.55}) rotate(${butterfly.rotate * 0.15}deg)`, offset: 0.14 },
+          { opacity: 1, transform: `translate3d(${butterfly.x * 0.28}px, ${butterfly.y * 0.28 - 18}px, 0) scale(${butterfly.scale}) rotate(${butterfly.rotate * 0.35}deg)`, offset: 0.36 },
+          { opacity: 0.9, transform: `translate3d(${butterfly.x * 0.72}px, ${butterfly.y * 0.72 + 18}px, 0) scale(${butterfly.scale * 1.04}) rotate(${butterfly.rotate}deg)`, offset: 0.76 },
+          { opacity: 0, transform: `translate3d(${butterfly.x}px, ${butterfly.y}px, 0) scale(${butterfly.scale * 0.9}) rotate(${butterfly.rotate * 1.25}deg)` },
+        ],
+        {
+          duration: 4200,
+          delay: butterfly.delay,
+          easing: "cubic-bezier(0.16, 0.8, 0.28, 1)",
+          fill: "forwards",
+        }
+      ).addEventListener("finish", () => img.remove(), { once: true });
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!isSubmitted || !thanksCard.current) return;
+    const timer = window.setTimeout(() => {
+      if (thanksCard.current) launchButterflyBurst(thanksCard.current.getBoundingClientRect());
+    }, 120);
+
+    return () => window.clearTimeout(timer);
+  }, [isSubmitted, launchButterflyBurst]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Trigger spark animation
-    const rect = (e.target as any).getBoundingClientRect();
-    confetti({
-      particleCount: 50,
-      spread: 60,
-      origin: { 
-        x: (rect.left + rect.width / 2) / window.innerWidth, 
-        y: (rect.top + rect.height / 2) / window.innerHeight 
-      },
-      colors: ['#bfae91', '#ffffff', '#e6d5b8'],
-      ticks: 100,
-      gravity: 0.8,
-      shapes: ['circle'],
-      scalar: 0.6
-    });
-
     const newWish = { 
       id: Math.random().toString(), 
       ...formData, 
@@ -85,7 +130,7 @@ export default function RSVP({ theme }: { theme: any }) {
     await supabase.from("wedding_wishes").insert([formData]);
     
     setFormData({ name: "", attendance: "hadir", message: "" });
-    setTimeout(() => setIsSubmitted(false), 3000);
+    setTimeout(() => setIsSubmitted(false), 5600);
   };
 
   return (
@@ -121,11 +166,21 @@ export default function RSVP({ theme }: { theme: any }) {
         ))}
       </div>
 
-      <div className="rsvp-anim w-full max-w-sm mx-auto relative z-10">
+      <div className="rsvp-anim relative z-[130] mx-auto w-full max-w-sm">
         {isSubmitted ? (
-          <div className="text-center py-12 border border-current/20 bg-[var(--color-bg)]/50 backdrop-blur-md">
-            <h3 className="font-serif text-2xl text-current mb-2">Terima Kasih</h3>
-            <p className="text-current/60 text-xs">Pesan Anda telah dikirim.</p>
+          <div ref={thanksCard} className="relative z-[130] overflow-hidden border border-current/15 bg-[#17130f]/95 px-8 py-12 text-center shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+            <div className="pointer-events-none absolute inset-4 border border-current/10 bg-[radial-gradient(circle_at_center,rgba(244,241,234,0.08),transparent_65%)]" />
+            <div className="mx-auto mb-6 h-[1px] w-16 bg-[var(--color-accent)]/50" />
+            <p className="mb-3 font-sans text-[9px] uppercase tracking-[0.35em] text-[var(--color-accent)]/80">
+              Pesan Terkirim
+            </p>
+            <h3 className="mb-4 font-script text-5xl leading-none text-current drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]" style={{ fontFamily: "var(--font-script)" }}>
+              Terima Kasih
+            </h3>
+            <p className="mx-auto max-w-[15rem] font-serif text-sm leading-relaxed text-current/70">
+              Doa dan ucapan Anda telah kami terima dengan penuh rasa syukur.
+            </p>
+            <div className="mx-auto mt-6 h-[1px] w-16 bg-[var(--color-accent)]/50" />
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-8 text-current">

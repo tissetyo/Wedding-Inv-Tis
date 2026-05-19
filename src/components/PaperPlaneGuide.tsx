@@ -11,6 +11,12 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP);
 }
 
+const BUTTERFLY_POSES = {
+  idle: "/animations/butterfly-pet/rest-breathe.gif",
+  left: "/animations/butterfly-pet/fly-left.gif",
+  right: "/animations/butterfly-pet/fly-right.gif",
+};
+
 interface GuideProps {
   icon?: string;
   customImage?: string;
@@ -31,6 +37,7 @@ export default function PaperPlaneGuide({
   const container = useRef<HTMLDivElement>(null);
   const planeRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
+  const customImageRef = useRef<HTMLImageElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
   const [docHeight, setDocHeight] = useState(6000);
 
@@ -144,6 +151,17 @@ export default function PaperPlaneGuide({
         }
 
         // ── 6. Bind plane to motionPath ──
+        const isButterflyGuide = icon === 'custom' && Boolean(customImage?.includes('butterfly'));
+        let previousX = Number(gsap.getProperty(planeRef.current, "x")) || 0;
+        let stillFrames = 0;
+        let currentPose: keyof typeof BUTTERFLY_POSES = "idle";
+
+        const setButterflyPose = (pose: keyof typeof BUTTERFLY_POSES) => {
+          if (!customImageRef.current || currentPose === pose) return;
+          currentPose = pose;
+          customImageRef.current.setAttribute("src", BUTTERFLY_POSES[pose]);
+        };
+
         gsap.to(planeRef.current, {
           scrollTrigger: {
             trigger: mempelaiTitle ? mempelaiTitle : sections[1],
@@ -155,7 +173,25 @@ export default function PaperPlaneGuide({
             path: pathRef.current,
             align: pathRef.current,
             alignOrigin: [0.5, 0.5],
-            autoRotate: true,
+            autoRotate: !isButterflyGuide,
+          },
+          onUpdate: () => {
+            if (!isButterflyGuide || !planeRef.current) return;
+
+            const nextX = Number(gsap.getProperty(planeRef.current, "x")) || previousX;
+            const deltaX = nextX - previousX;
+            previousX = nextX;
+
+            if (deltaX > 0.3) {
+              stillFrames = 0;
+              setButterflyPose("right");
+            } else if (deltaX < -0.3) {
+              stillFrames = 0;
+              setButterflyPose("left");
+            } else {
+              stillFrames += 1;
+              if (stillFrames > 8) setButterflyPose("idle");
+            }
           },
           ease: "none",
         });
@@ -245,13 +281,20 @@ export default function PaperPlaneGuide({
       {/* Flying icon */}
       <div 
         ref={planeRef} 
-        className="absolute top-0 left-0 w-10 h-10 text-[#f4f1ea] drop-shadow-[0_5px_15px_rgba(244,241,234,0.6)] z-10 flex justify-center items-center"
+        className={`absolute left-0 top-0 z-10 flex items-center justify-center text-[#f4f1ea] drop-shadow-[0_5px_15px_rgba(244,241,234,0.6)] ${icon === 'custom' ? 'h-16 w-16' : 'h-10 w-10'}`}
       >
         <div ref={innerRef} className="w-full h-full">
-          <div className="w-full h-full" style={{ transform: `rotate(${45 + rotation}deg) translate(2px, -2px)` }}>
+          <div className="w-full h-full" style={{ transform: `rotate(${icon === 'custom' ? rotation : 45 + rotation}deg) translate(2px, -2px)` }}>
             {(() => {
               if (icon === 'custom' && customImage) {
-                 return <img src={customImage} alt="Guide Icon" className="w-12 h-12 object-contain filter drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]" />;
+                 return (
+                   <img
+                     ref={customImageRef}
+                     src={customImage}
+                     alt="Guide Icon"
+                     className="h-16 w-[104px] max-w-none object-contain filter drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]"
+                   />
+                 );
               }
               const IconComponent = icon === 'leaf' ? Leaf : icon === 'feather' ? Feather : icon === 'sparkles' ? Sparkles : Send;
               return <IconComponent className="w-full h-full" strokeWidth={1.5} fill="#f4f1ea" />;

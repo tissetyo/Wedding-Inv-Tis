@@ -53,12 +53,12 @@ export default function Events({ events, theme }: { events: EventConfig[]; theme
                 <p className="text-[#f4f1ea]/40 mb-1 tracking-[0.3em] text-[9px]">Date</p>
                 <p>{(() => { const d = new Date(event.date); return isNaN(d.getTime()) ? 'Segera diumumkan' : d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); })()}</p>
               </div>
-              <div className="w-[1px] h-6 bg-[#f4f1ea]/10 mx-auto" />
+              <div className="mx-auto h-[1px] w-10 bg-[#f4f1ea]/10" />
               <div>
                 <p className="text-[#f4f1ea]/40 mb-1 tracking-[0.3em] text-[9px]">Time</p>
                 <p>{event.time}</p>
               </div>
-              <div className="w-[1px] h-6 bg-[#f4f1ea]/10 mx-auto" />
+              <div className="mx-auto h-[1px] w-10 bg-[#f4f1ea]/10" />
               <div>
                 <p className="text-[#f4f1ea]/40 mb-1 tracking-[0.3em] text-[9px]">Location</p>
                 <p className="mb-1">{event.locationName}</p>
