@@ -9,7 +9,7 @@ const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["300", "400"
 const vibes = Great_Vibes({ subsets: ["latin"], weight: "400", variable: "--font-script" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://wedding-titis-tyara.vercel.app"),
   title: "The Wedding Of Titis & Tyara",
   description: "Wedding Invitation Titis & Tyara",
   openGraph: {
