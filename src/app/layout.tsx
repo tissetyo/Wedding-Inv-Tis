@@ -18,9 +18,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-image.png",
-        width: 1254,
-        height: 1254,
+        url: "/og-image-whatsapp.jpg",
+        width: 1200,
+        height: 630,
         alt: "Titis & Tyara Wedding Invitation",
       },
     ],
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "The Wedding Of Titis & Tyara",
     description: "Wedding Invitation Titis & Tyara",
-    images: ["/og-image.png"],
+    images: ["/og-image-whatsapp.jpg"],
   },
 };
 
