@@ -11,16 +11,16 @@ const vibes = Great_Vibes({ subsets: ["latin"], weight: "400", variable: "--font
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://wedding-titis-tyara.vercel.app"),
   title: "The Wedding Of Titis & Tyara",
-  description: "Wedding Invitation Titis & Tyara",
+  description: "Akhirnya nikah juga guysss",
   openGraph: {
     title: "The Wedding Of Titis & Tyara",
-    description: "Wedding Invitation Titis & Tyara",
+    description: "Akhirnya nikah juga guysss",
     type: "website",
     images: [
       {
-        url: "/og-image-whatsapp.jpg",
-        width: 1200,
-        height: 630,
+        url: "/og-image.png",
+        width: 1254,
+        height: 1254,
         alt: "Titis & Tyara Wedding Invitation",
       },
     ],
@@ -28,8 +28,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "The Wedding Of Titis & Tyara",
-    description: "Wedding Invitation Titis & Tyara",
-    images: ["/og-image-whatsapp.jpg"],
+    description: "Akhirnya nikah juga guysss",
+    images: ["/og-image.png"],
   },
 };
 
